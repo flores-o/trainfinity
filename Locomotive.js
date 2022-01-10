@@ -14,7 +14,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
    * @param y
    * @param The direction the locomotive is heading, e.g. "N"
    */
-  constructor(scene, grid, x, y, direction) {
+  constructor(scene, grid, x, y, direction, locomotiveText) {
     super(scene, x, y, 'locomotive');
     this.grid = grid;
     this.pathProgress = 0;
@@ -25,6 +25,14 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     this.direction = direction;
     this._setAngle();
     this.depth = 1;
+
+	// @SolbiatiAlessandro
+	this.fuel = 100;
+	this.hasText = false;
+	if (typeof locomotiveText != 'undefined') {
+		this.hasText = true;
+		this.locomotiveText = locomotiveText;
+	}
 
     this._addPathOfCurrentRail();
   }
@@ -42,11 +50,25 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     let pathProgressDelta = pixelsSinceLast / length;
     this.pathProgress += pathProgressDelta;
 
-    if (this.pathProgress < 1) {
+    if (this.pathProgress < 1 && this.fuel > 0) {
+
+	  this.fuel -= this.pathProgress;
+	  if(this.hasText){
+		  if (this.fuel > 0){
+			  this.locomotiveText.setText("Fuel: " + Math.floor(this.fuel));
+		  } else {
+			  this.locomotiveText.setText("OUT OF FUEL!");
+		  }
+
+	  }
+
       let vector = this.path.getPoint(this.pathProgress);
       this.previousX = this.x;
       this.previousY = this.y;
       this.setPosition(vector.x, vector.y);
+	  if (this.hasText){
+		  this.locomotiveText.setPosition(vector.x, vector.y);
+	  }
       this._calculateDirection();
       this._setAngle();
     } else {
