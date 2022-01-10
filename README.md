@@ -1,10 +1,15 @@
 
-
 # ProgrammableTrains
 
-Add fuel to trains
-Add money and market dynamics
+You are a train engineer. You have been charged of building a railway to bring 100 units of coals to the factory. Watch out your trains don't run out of coal!
 
+Fun fact: trains are programmable javascript snippets
+
+To run the game: clone repo, python3 -m http.server, open index.html
+
+BUGS:
+- mines work only if approached from left and bottom
+- if coal goes down from one mine goes down also from other mines?
 
 -----
 
