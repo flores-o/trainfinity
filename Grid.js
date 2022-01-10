@@ -27,6 +27,15 @@ class Grid {
     ];
   }
 
+  floatAdjacent(position) {
+    return [
+      {x: position.x, y: position.y - (constants.TILESIZE / 2)},
+      {x: position.x, y: position.y + constants.TILESIZE},
+      {x: position.x - constants.TILESIZE, y: position.y},
+      {x: position.x + constants.TILESIZE, y: position.y},
+    ];
+  }
+
   adjacentBuildings(position) {
     return this.adjacent(position).filter(this.hasBuilding.bind(this))
 		  .map(this.get.bind(this));

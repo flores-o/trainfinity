@@ -7,11 +7,19 @@ class Building extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, name, inventory, buildingText) {
     super(scene, x, y, name);
 	this.setName(name);
-	this.inventory = inventory
 	this.hasText = false;
 	this.timer = 0;
-	// TODO: make subclass mine
-	this.coalGenerationFactor = Math.random() * 3;
+	this.victory = false;
+	switch(this.name){
+		  case "mine":
+			  this.coalGenerationFactor = Math.random() * 3;
+			  this.inventory = {coal: 50}
+			  break;
+		  case "factory":
+			  this.coalGenerationFactor = 0;
+			  this.inventory = {coal: 0}
+			  break;
+	  }
 	if (typeof buildingText != 'undefined') {
 		this.hasText = true;
 		this.buildingText = buildingText;
@@ -20,14 +28,7 @@ class Building extends Phaser.GameObjects.Sprite {
   }
 
   trainPassing(train){
-	  switch(this.name){
-		  case "mine":
-			  train.stopMine(this);
-			  break;
-		  case "factory":
-			  train.stopFactory(this);
-			  break;
-	  }
+	  train.stopAt(this);
 	  this._setText();
   }
 
@@ -48,14 +49,16 @@ class Building extends Phaser.GameObjects.Sprite {
 	  super.preUpdate(time, delta);
 	  this.timer += delta;
 	  if (this.timer > 5000){
-		  switch(this.name){
-			  case "mine":
-				  this.inventory.coal += this.coalGenerationFactor;
-				  break;
-		  }
+		  this.inventory.coal += this.coalGenerationFactor;
 		  this._setText();
 		  this.timer = 0;
+		  if (this.inventory.coal >= 100 && this.name == "factory" && 
+			  this.victory == false){
+			  this.victory = true;
+			  alert("Wow! You moved 100 unites of coal to this factory. You are a great railway engineer, everyone can't wait to see what amazing railways you are going to build next!\n\n Now can you move 100 unites of coal to the other factory?");
+		  }
 	  }
+	  
 
   }
 }

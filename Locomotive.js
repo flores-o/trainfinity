@@ -28,13 +28,14 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	this.stoppedTime = 0;
 
 	// @SolbiatiAlessandro
-	this.fuel = 100;
+	this.fuel = 10;
 	this.fuel_capacity = 100;
 	this.hasText = false;
 	if (typeof locomotiveText != 'undefined') {
 		this.hasText = true;
 		this.locomotiveText = locomotiveText;
 	}
+	this.lost = false;
 
     this._addPathOfCurrentRail();
   }
@@ -46,7 +47,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     //     this.currentBuilding.x + ',' + this.currentBuilding.y + '). Turn ' + turn);
 
     // Calculate pathProgress
-    var speedPerMs = 0.1;
+    var speedPerMs = 0.05;
 	if (this.stoppedTime > 0){
 		speedPerMs = 0;
 		this.stoppedTime -= delta;
@@ -56,6 +57,12 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     let pixelsSinceLast = speedPerMs * delta;
     let pathProgressDelta = pixelsSinceLast / length;
     this.pathProgress += pathProgressDelta;
+
+	if (this.fuel <= 0 && this.lost == false){
+		this.lost == true;
+		location.reload()
+	}
+
 
     if (this.pathProgress < 1 && this.fuel > 0) {
 
@@ -74,11 +81,18 @@ class Locomotive extends Phaser.GameObjects.Sprite {
       this.previousX = this.x;
       this.previousY = this.y;
       this.setPosition(vector.x, vector.y);
+	  console.log(vector.x, vector.y);
 	  if (this.hasText){
 		  this.locomotiveText.setPosition(vector.x, vector.y);
 	  }
 	  if (this.grid.isBuildingAdjacent(vector)) {
-		  let adjacentBuildings = this.grid.adjacentBuildings(vector);
+		  //TODO: ugly bug here, based on the speed is going to stop
+		  // or not stop at a station. I.E. slow is going to stop 5 times, 
+		  // fast is not going to stop. Looks like with 0.05 speed
+		  // on alex computer is going to stop always once at all stations
+		  let adjacentBuildings = this.grid.adjacentBuildings(
+			  {x: Math.floor(vector.x), y: Math.floor(vector.y)});
+			  //vector );
 		  adjacentBuildings.forEach(building => building.trainPassing(this))
 	  }
       this._calculateDirection();
@@ -146,20 +160,23 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     //this.path.draw(this.graphics);
   }
 
-  stopMine(mine){
-	  console.log("train stopped by mine");
-	  console.log(mine);
-	  this.stoppedTime = 2000;
-	  var received_coal = Math.min(this.fuel_capacity - this.fuel, mine.inventory.coal)
-	  this.fuel += received_coal;
-	  mine.inventory.coal -= received_coal;
+  stopAt(station){
+	  this.stoppedTime = 1000;
+	  // THIS IS THE GAME EDITABLE CODE
+	  if (station.name == 'mine') {
+		  var received_coal = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
+		  this.fuel += received_coal;
+		  station.inventory.coal -= received_coal;
+	  }
+	  if (station.name == 'factory') {
+		  var given_coal = this.fuel / 2;
+		  station.inventory.coal += given_coal;
+		  this.fuel -= given_coal;
+	  }
+	  // FINISH GAME EDITABLE CODE
+
   }
 
-  stopFactory(factory){
-	  console.log("train stopped by factory");
-	  console.log(factory);
-	  this.stoppedTime = 1000;
-  }
 }
 
 export {Locomotive};

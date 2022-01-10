@@ -11,6 +11,7 @@ class Creator {
   constructor(game) {
     console.log(game);
     this._game = game;
+	this._game.stations = [];
     // TODO: move this to constants
     this._tileSize = constants.TILESIZE
   }
@@ -31,15 +32,16 @@ class Creator {
   }
 
   _createFactories() {
-    this._createBuildings( 'factory', constants.FACTORIES)
+    this._game.stations.push(this._createBuildings( 'factory', constants.FACTORIES));
   }
 
   _createMines() {
-    this._createBuildings( 'mine', constants.MINES, {coal: 0})
+    this._game.stations.push(this._createBuildings( 'mine', constants.MINES, {coal: 0}));
   }
 
   _createBuildings(name, count, initial_inventory) {
     let roundToNearestTile = x => this._tileSize * Math.round(x / this._tileSize);
+	var buildings = [];
     for (let i = 0; i < count; i++) {
 	  let isOnWater = true;
 	  var x;
@@ -54,8 +56,10 @@ class Creator {
 			  isOnWater = false;
 		  }
 	  }
-	  this._createBuilding(name, x, y, initial_inventory)
+	  
+	  buildings.push(this._createBuilding(name, x, y, initial_inventory));
     }
+	return buildings;
   }
 
   _createWater() {
@@ -81,6 +85,7 @@ class Creator {
     this._game.add.existing(building);
     this._game.add.existing(buildingText);
     this._game.grid.set({x, y}, building)
+	return building;
   }
 
 }
