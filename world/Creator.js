@@ -4,6 +4,7 @@
 
 import * as constants from "./constants.js"
 import {Water} from "./Water.js"
+import {Building} from "./Building.js"
 
 class Creator {
 
@@ -16,9 +17,9 @@ class Creator {
 
   create() {
     this._createGrass();
+    this._createWater()
     this._createFactories();
     this._createMines();
-    this._createWater()
   }
 
   _createGrass() {
@@ -30,19 +31,30 @@ class Creator {
   }
 
   _createFactories() {
-    this._createBuildings(this._game, 'factory', constants.FACTORIES)
+    this._createBuildings( 'factory', constants.FACTORIES)
   }
 
   _createMines() {
-    this._createBuildings(this._game, 'mine', constants.MINES)
+    this._createBuildings( 'mine', constants.MINES)
   }
 
   _createBuildings(name, count) {
     let roundToNearestTile = x => this._tileSize * Math.round(x / this._tileSize);
     for (let i = 0; i < count; i++) {
-      let x = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_X, constants.GRID_MAX_X))
-      let y = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_Y, constants.GRID_MAX_Y))
-      this._createBuilding(name, x, y)
+	  let isOnWater = true;
+	  var x;
+	  var y;
+	  while (isOnWater) {
+		  x = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_X, constants.GRID_MAX_X));
+		  y = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_Y, constants.GRID_MAX_Y));
+		  let currentBlock = this._game.grid.get({x: x, y: y});
+		  if (typeof currentBlock != 'undefined' && currentBlock.name == 'water'){
+			  isOnWater = true;
+		  } else {
+			  isOnWater = false;
+		  }
+	  }
+	  this._createBuilding(name, x, y)
     }
   }
 
@@ -64,7 +76,8 @@ class Creator {
   }
 
   _createBuilding(name, x, y) {
-    let building = new Building(this._game, x + this._tileSize / 2, y + this._tileSize / 2, name);
+	console.log("creating building "+name+x+" "+ y);
+    let building = new Building(this._game, x, y, name);
     this._game.add.existing(building);
     this._game.grid.set({x, y}, building)
   }
