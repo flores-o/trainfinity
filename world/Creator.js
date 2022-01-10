@@ -35,18 +35,18 @@ class Creator {
   }
 
   _createMines() {
-    this._createBuildings( 'mine', constants.MINES)
+    this._createBuildings( 'mine', constants.MINES, {coal: 0})
   }
 
-  _createBuildings(name, count) {
+  _createBuildings(name, count, initial_inventory) {
     let roundToNearestTile = x => this._tileSize * Math.round(x / this._tileSize);
     for (let i = 0; i < count; i++) {
 	  let isOnWater = true;
 	  var x;
 	  var y;
 	  while (isOnWater) {
-		  x = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_X, constants.GRID_MAX_X));
-		  y = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_Y, constants.GRID_MAX_Y));
+		  x = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_X + 100, constants.GRID_MAX_X - 100));
+		  y = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_Y + 100, constants.GRID_MAX_Y - 100));
 		  let currentBlock = this._game.grid.get({x: x, y: y});
 		  if (typeof currentBlock != 'undefined' && currentBlock.name == 'water'){
 			  isOnWater = true;
@@ -54,7 +54,7 @@ class Creator {
 			  isOnWater = false;
 		  }
 	  }
-	  this._createBuilding(name, x, y)
+	  this._createBuilding(name, x, y, initial_inventory)
     }
   }
 
@@ -75,10 +75,11 @@ class Creator {
     }
   }
 
-  _createBuilding(name, x, y) {
-	console.log("creating building "+name+x+" "+ y);
-    let building = new Building(this._game, x, y, name);
+  _createBuilding(name, x, y, inventory) {
+	let buildingText = new Phaser.GameObjects.Text(this._game, x + constants.TILESIZE / 2, y - constants.TILESIZE / 2, name);
+    let building = new Building(this._game, x, y, name, inventory, buildingText) ;
     this._game.add.existing(building);
+    this._game.add.existing(buildingText);
     this._game.grid.set({x, y}, building)
   }
 

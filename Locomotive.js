@@ -25,9 +25,11 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     this.direction = direction;
     this._setAngle();
     this.depth = 1;
+	this.stoppedTime = 0;
 
 	// @SolbiatiAlessandro
 	this.fuel = 100;
+	this.fuel_capacity = 100;
 	this.hasText = false;
 	if (typeof locomotiveText != 'undefined') {
 		this.hasText = true;
@@ -44,7 +46,12 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     //     this.currentBuilding.x + ',' + this.currentBuilding.y + '). Turn ' + turn);
 
     // Calculate pathProgress
-    let speedPerMs = 0.1;
+    var speedPerMs = 0.1;
+	if (this.stoppedTime > 0){
+		speedPerMs = 0;
+		this.stoppedTime -= delta;
+		return;
+	}
     let length = this.path.getLength();
     let pixelsSinceLast = speedPerMs * delta;
     let pathProgressDelta = pixelsSinceLast / length;
@@ -52,7 +59,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
     if (this.pathProgress < 1 && this.fuel > 0) {
 
-	  this.fuel -= this.pathProgress;
+	  this.fuel -= pathProgressDelta;
 	  if(this.hasText){
 		  if (this.fuel > 0){
 			  this.locomotiveText.setText("Fuel: " + Math.floor(this.fuel));
@@ -62,12 +69,17 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	  }
 
+
       let vector = this.path.getPoint(this.pathProgress);
       this.previousX = this.x;
       this.previousY = this.y;
       this.setPosition(vector.x, vector.y);
 	  if (this.hasText){
 		  this.locomotiveText.setPosition(vector.x, vector.y);
+	  }
+	  if (this.grid.isBuildingAdjacent(vector)) {
+		  let adjacentBuildings = this.grid.adjacentBuildings(vector);
+		  adjacentBuildings.forEach(building => building.trainPassing(this))
 	  }
       this._calculateDirection();
       this._setAngle();
@@ -132,6 +144,21 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     this.graphics.clear();
     this.graphics.lineStyle(2, 0xffffff, 1);
     //this.path.draw(this.graphics);
+  }
+
+  stopMine(mine){
+	  console.log("train stopped by mine");
+	  console.log(mine);
+	  this.stoppedTime = 2000;
+	  var received_coal = Math.min(this.fuel_capacity - this.fuel, mine.inventory.coal)
+	  this.fuel += received_coal;
+	  mine.inventory.coal -= received_coal;
+  }
+
+  stopFactory(factory){
+	  console.log("train stopped by factory");
+	  console.log(factory);
+	  this.stoppedTime = 1000;
   }
 }
 

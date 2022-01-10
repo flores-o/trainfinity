@@ -5,6 +5,7 @@
 import {RailSegment} from "./RailSegment.js"
 import {Station} from "./StationBuilder.js"
 import {Water} from "./world/Water.js"
+import {Building} from "./world/Building.js"
 import * as constants from "./world/constants.js"
 
 class Grid {
@@ -19,11 +20,20 @@ class Grid {
    */
   adjacent(position) {
     return [
-      {x: position.x, y: position.y - constants.TILESIZE},
-      {x: position.x, y: position.y + constants.TILESIZE},
-      {x: position.x - constants.TILESIZE, y: position.y},
-      {x: position.x + constants.TILESIZE, y: position.y},
+      {x: Math.floor(position.x), y: Math.floor(position.y) - constants.TILESIZE},
+      {x: Math.floor(position.x), y: Math.floor(position.y) + constants.TILESIZE},
+      {x: Math.floor(position.x) - constants.TILESIZE, y: Math.floor(position.y)},
+      {x: Math.floor(position.x) + constants.TILESIZE, y: Math.floor(position.y)},
     ];
+  }
+
+  adjacentBuildings(position) {
+    return this.adjacent(position).filter(this.hasBuilding.bind(this))
+		  .map(this.get.bind(this));
+  }
+
+  isBuildingAdjacent(position) {
+    return this.adjacent(position).some(this.hasBuilding.bind(this));
   }
 
   isRailAdjacent(position) {
@@ -67,7 +77,7 @@ class Grid {
   }
 
   hasBuilding(position) {
-    return !!this.get(position);
+    return this.get(position) instanceof Building;
   }
 
   hasRail(position) {
