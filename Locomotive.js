@@ -159,6 +159,21 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     //this.path.draw(this.graphics);
   }
 
+  tradeWithStation(station, coal){
+	  if(station.name == 'mine'){
+		  this.fuel += coal;
+		  station.inventory.coal -= coal;
+	  }
+	  if(station.name == 'factory'){
+		  station.inventory.coal += coal;
+		  this.fuel -= coal;
+	  }
+  }
+
+  waitAtStation(milliseconds){
+	  this.stoppedTime = milliseconds;
+  }
+
   stopAt(station){
 	  this.stoppedTime = 1000;
 	  // THIS IS THE GAME EDITABLE CODE

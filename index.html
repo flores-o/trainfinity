@@ -12,8 +12,8 @@
 	<div class="row">
 		<div id="game-canvas" class="col-7" ></div>
 		<div id="IDE" class="col" style="color:white;height:800px;background-color:black;">
-			<h1>Programmable Trains</h1>
-			<h3>This is the code running the trains! Edit it to become a powerful train engineer!</h3>
+			<br/>
+			<p><i>All</i> trains are running this code. When a train runs out of fuel you lose the train. <b>If all trains run out of fuel you lose the game.</b> Good luck!</p>
 			<textarea id="code-input" style="border: solid 1px white; width: 100%; height: 600px;" ></textarea>
 			<div id ="saved-code" style="display:none"></div>
 			<div id ="working-code"style="display:none"></div>
@@ -24,17 +24,22 @@
 	</div>
 
 <script>
-	var starting_code = `
+	var starting_code = `// this Javascript code runs all the time a train enters a a station
+
 if (station.name == 'mine') {
-  var received_coal = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
-  this.fuel += received_coal;
-  station.inventory.coal -= received_coal;
+   var coalToBuy = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
+   this.tradeWithStation(station, coalToBuy);
+   this.waitAtStation(1000); // wait 1 second **after** trading before leaving
 }
 if (station.name == 'factory') {
-  var given_coal = this.fuel / 2;
-  station.inventory.coal += given_coal;
-  this.fuel -= given_coal;
+   var coalToSell = this.fuel / 2;
+   this.tradeWithStation(station, coalToSell);
+   this.waitAtStation(1000); // wait 1 second **after** trading before leaving
 }
+
+// you can try more advanced stuff
+
+this.rememberForNextTime = 1;
 `;
 	document.getElementById("working-code").innerHTML = starting_code;
 	document.getElementById("saved-code").innerHTML = starting_code;
