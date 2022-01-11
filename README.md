@@ -1,6 +1,8 @@
 
 # ProgrammableTrains
 
+![](https://github.com/SolbiatiAlessandro/trainfinity/blob/master/Screenshot%202022-01-10%20at%2021.20.09.png?raw=true)
+
 You are a train engineer. You have been charged of building a railway to bring 100 units of coals to the factory. Watch out your trains don't run out of coal!
 
 Fun fact: trains are programmable javascript snippets
