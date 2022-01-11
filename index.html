@@ -1,11 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/phaser@3.6.1/dist/phaser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.js"></script>
   <script src="RailBuilder.js" type="module"></script>
 </head>
-<body>
+<body style="background-color:black;">
+
+	<div class="row">
+		<div id="game-canvas" class="col-7" ></div>
+		<div id="IDE" class="col" style="color:white;height:800px;background-color:black;">
+			<h1>Programmable Trains</h1>
+			<h3>This is the code running the trains! Edit it to become a powerful train engineer!</h3>
+			<textarea id="code-input" style="border: solid 1px white; width: 100%; height: 600px;" ></textarea>
+			<div id ="saved-code" style="display:none"></div>
+			<div id ="working-code"style="display:none"></div>
+			<button  onclick="updateCode()">Update Code</button>
+			<p><i>Warning: when you lose the game you lose your code!</i></p>
+			</div>
+		</div>
+	</div>
+
+<script>
+	var starting_code = `
+if (station.name == 'mine') {
+  var received_coal = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
+  this.fuel += received_coal;
+  station.inventory.coal -= received_coal;
+}
+if (station.name == 'factory') {
+  var given_coal = this.fuel / 2;
+  station.inventory.coal += given_coal;
+  this.fuel -= given_coal;
+}
+`;
+	document.getElementById("working-code").innerHTML = starting_code;
+	document.getElementById("saved-code").innerHTML = starting_code;
+	document.getElementById("code-input").value = starting_code;
+
+	function updateCode(){
+		var savedCode = document.getElementById("code-input").value;
+		document.getElementById("saved-code").innerHTML = savedCode;
+	}
+</script>
 
 <script type="module">
   import  {Grid}  from "./Grid.js";
@@ -19,7 +58,7 @@
   import  {Creator} from "./world/Creator.js"
   import * as constants from "./world/constants.js"
 
-  let WIDTH = 1500;
+  let WIDTH = 1100;
   let HEIGHT = 800;
   let TILESIZE = 32;
 
@@ -36,7 +75,8 @@
       preload: preload,
       create: create,
       update: update
-    }
+    },
+	parent: 'game-canvas',
   };
 
   var game = new Phaser.Game(config);
@@ -153,9 +193,10 @@
       this.cameras.main.scrollY -= scrollYchange;
     }, this);
 
-    let gui = new dat.GUI();
+    //let gui = new dat.GUI();
     let cam = this.cameras.main;
 
+	/*
     let f1 = gui.addFolder('Camera');
     f1.add(cam, 'x').listen();
     f1.add(cam, 'y').listen();
@@ -167,6 +208,7 @@
     f2.add(this.cameraController, '_draggingCamera').listen();
     f2.add(this.railBuilder, 'building').listen();
     f2.open();
+	*/
 
     /* DEBUG
     _debugAddRail(this, RailSegment, 320, 320, ['N']);

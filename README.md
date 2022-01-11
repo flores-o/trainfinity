@@ -8,18 +8,27 @@ Fun fact: trains are programmable javascript snippets
 To run the game: clone repo, python3 -m http.server, open index.html
 
 GAME STORY:
-- given 999$, train and 100 free coal to bring to factory, rail costs 5, vagon costs 1000, train costs 3000
-- factory gives you 10.000$ for those 100 coal, start to produce alluminium, buys steel for more
+- if all train run out of fuel game over
+- build railway bring 100 coal to factory
+- now factory trust you and pays you 10$/coal, build railway that generate 100$/minute
+- you are generating 100$/minute so the bank give you a loan of 10000$. You can now build a...
 
-FEATURES:
-- PROGRAMMABLE (write access to player) TRAINS
-- PROGRAMMABLE (read access to player) mines and factories
+GAME FEATURES:
 - introduce money
 - paid money to sell coal to factories
+- achievement: money per minute
 - factories produce steel with 100 coal
 - factorioes buy steel for more money
 - use money to buy vagons so that train last longer
 - mines get upgraded as game progresses
+
+PROGRAMMABLE FEATURES:
+- PROGRAMMABLE (write access to player) TRAINS
+- PROGRAMMABLE (read access to player) mines and factories
+- give access to memory (e.g. global dictionary)
+- make interaction happen after stop train
+- access to station and name trains?
+- code size -> train speed
 
 BUGS:
 - [half fixed] mines work only if approached from left and bottom

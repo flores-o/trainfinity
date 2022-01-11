@@ -60,7 +60,6 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	if (this.fuel <= 0 && this.lost == false){
 		this.lost == true;
-		location.reload()
 	}
 
 
@@ -81,7 +80,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
       this.previousX = this.x;
       this.previousY = this.y;
       this.setPosition(vector.x, vector.y);
-	  console.log(vector.x, vector.y);
+	  //console.log(vector.x, vector.y);
 	  if (this.hasText){
 		  this.locomotiveText.setPosition(vector.x, vector.y);
 	  }
@@ -163,15 +162,19 @@ class Locomotive extends Phaser.GameObjects.Sprite {
   stopAt(station){
 	  this.stoppedTime = 1000;
 	  // THIS IS THE GAME EDITABLE CODE
-	  if (station.name == 'mine') {
-		  var received_coal = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
-		  this.fuel += received_coal;
-		  station.inventory.coal -= received_coal;
-	  }
-	  if (station.name == 'factory') {
-		  var given_coal = this.fuel / 2;
-		  station.inventory.coal += given_coal;
-		  this.fuel -= given_coal;
+
+	  try{
+		  var newSavedCode = document.getElementById("saved-code").innerHTML;
+		  eval(
+			  newSavedCode
+		  );
+		document.getElementById("working-code").innerHTML = newSavedCode;
+	  } catch(err) {
+		  ;debugger
+		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n"+err.stack);
+		  eval(
+			document.getElementById("working-code").innerHTML
+		  );
 	  }
 	  // FINISH GAME EDITABLE CODE
 
