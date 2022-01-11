@@ -24,7 +24,7 @@ class TrainBuilder extends ActionController {
     let locomotivePosition = this.positions[0];
     let wagonPositions = this.positions.slice(1);
 	let locomotiveText = new Phaser.GameObjects.Text(this._scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");
-    let leader = new Locomotive(this._scene, this.grid, locomotivePosition.x, locomotivePosition.y, this._direction(), locomotiveText);
+    let leader = new Locomotive(this._scene, this.grid, locomotivePosition.x, locomotivePosition.y, this._direction(), locomotiveText, this._scene.player);
     this.gameObjects = [leader, locomotiveText];
     for (let position of wagonPositions) {
       let wagon = new Wagon(this._scene, position.x, position.y, leader);

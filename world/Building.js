@@ -6,17 +6,21 @@ class Building extends Phaser.GameObjects.Sprite {
   // inventory is {coal: 24, money: 15}
   constructor(scene, x, y, name, inventory, buildingText) {
     super(scene, x, y, name);
+	
+	this._scene = scene;
 	this.setName(name);
 	this.hasText = false;
 	this.timer = 0;
 	this.victory = false;
 	switch(this.name){
 		  case "mine":
-			  this.coalGenerationFactor = Math.random() * 3;
-			  this.inventory = {coal: 50}
+			  this.coalTradePrice = Math.random() * 3 + 1;
+			  this.coalGenerationFactor = Math.random() * 3 + 1;
+			  this.inventory = {coal: 0}
 			  break;
 		  case "factory":
 			  this.coalGenerationFactor = 0;
+			  this.coalTradePrice = Math.random() * 3 + 10;
 			  this.inventory = {coal: 0}
 			  break;
 	  }
@@ -35,13 +39,13 @@ class Building extends Phaser.GameObjects.Sprite {
   _setText(){
 	  // breaks if buildingText is undefined
 	  var _text = this.name + "\n";
-	  if(typeof this.inventory	!=  'undefined'){
-		  for (const [key, value] of Object.entries(this.inventory)) {
-			 _text += key + ": " + Math.floor(value) + "\n"; 
-		  }
-	  } else {
-		  _text += '(empty)';
-	  }
+	  /*
+	  for (const [key, value] of Object.entries(this.inventory)) {
+		 _text += key + ": " + Math.floor(value) + "\n"; 
+	  }*/
+	  _text += "coal: " + Math.floor(this.inventory.coal) + "\n" + 
+		  this.coalTradePrice.toFixed(1) + "$/unit \n"; 
+	
 	  this.buildingText.setText(_text);
   }
 
@@ -55,7 +59,10 @@ class Building extends Phaser.GameObjects.Sprite {
 		  if (this.inventory.coal >= 100 && this.name == "factory" && 
 			  this.victory == false){
 			  this.victory = true;
-			  alert("Wow! You moved 100 unites of coal to this factory. You are a great railway engineer, everyone can't wait to see what amazing railways you are going to build next!\n\n Now can you move 100 unites of coal to the other factory?");
+			  this._scene.player.victoryFactory = true;
+			  this._scene.player.moneyText.visible = true;
+			  this._scene.player.moneyPMText.visible = true;
+			  alert("Wow! You moved 100 unites of coal to this factory. Your earned the factory's and you can now sell them carbon at $"+this.coalTradePrice.toFixed(2)+"/unit!\n\nNow, can you build a better railway that earns $1000/minute?");
 		  }
 	  }
 	  

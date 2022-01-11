@@ -13,7 +13,7 @@
 		<div id="game-canvas" class="col-7" ></div>
 		<div id="IDE" class="col" style="color:white;height:800px;background-color:black;">
 			<br/>
-			<p><i>All</i> trains are running this code. When a train runs out of fuel you lose the train. <b>If all trains run out of fuel you lose the game.</b> Good luck!</p>
+			<p><i>All</i> trains are running this code. <b>When a train runs out of fuel you lose the game.</b> Good luck!</p>
 			<textarea id="code-input" style="border: solid 1px white; width: 100%; height: 600px;" ></textarea>
 			<div id ="saved-code" style="display:none"></div>
 			<div id ="working-code"style="display:none"></div>
@@ -139,6 +139,7 @@ this.rememberForNextTime = 1;
     this.railBuilder = new RailBuilder(this.grid, this.buildingGroup, this);
     this.stationBuilder = new StationBuilder(this.grid, this.buildingGroup, this);
     this.trainBuilder = new TrainBuilder(this.grid, this.locomotiveGroup, this);
+
 
     this.physics.add.overlap(this.buildingGroup, this.buildingGroup, buildingOnBuilding, null, this);
     this.physics.add.overlap(this.locomotiveGroup, this.buildingGroup, locomotiveOnBuilding, null, this);
@@ -287,6 +288,7 @@ this.rememberForNextTime = 1;
   }
 
   function update() {
+  	this.player.update();
   }
 
 </script>

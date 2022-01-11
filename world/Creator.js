@@ -4,6 +4,7 @@
 
 import * as constants from "./constants.js"
 import {Water} from "./Water.js"
+import {Player} from "../Player.js"
 import {Building} from "./Building.js"
 
 class Creator {
@@ -21,6 +22,15 @@ class Creator {
     this._createWater()
     this._createFactories();
     this._createMines();
+	this._createPlayer();
+  }
+
+  _createPlayer(){
+	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE, "$0", {fontSize: '30px'});
+	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "0$/minute", {fontSize: '30px'});
+	this._game.add.existing(moneyText);
+	this._game.add.existing(moneyPMText);
+	this._game.player = new Player(moneyText, moneyPMText);
   }
 
   _createGrass() {
@@ -80,7 +90,7 @@ class Creator {
   }
 
   _createBuilding(name, x, y, inventory) {
-	let buildingText = new Phaser.GameObjects.Text(this._game, x + constants.TILESIZE / 2, y - constants.TILESIZE / 2, name);
+	let buildingText = new Phaser.GameObjects.Text(this._game, x + constants.TILESIZE / 2, y - constants.TILESIZE / 2, name, { fontSize: '14px'});
     let building = new Building(this._game, x, y, name, inventory, buildingText) ;
     this._game.add.existing(building);
     this._game.add.existing(buildingText);

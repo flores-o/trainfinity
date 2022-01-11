@@ -14,7 +14,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
    * @param y
    * @param The direction the locomotive is heading, e.g. "N"
    */
-  constructor(scene, grid, x, y, direction, locomotiveText) {
+  constructor(scene, grid, x, y, direction, locomotiveText, player) {
     super(scene, x, y, 'locomotive');
     this.grid = grid;
     this.pathProgress = 0;
@@ -36,6 +36,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		this.locomotiveText = locomotiveText;
 	}
 	this.lost = false;
+	this.owner = player;
 
     this._addPathOfCurrentRail();
   }
@@ -60,6 +61,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	if (this.fuel <= 0 && this.lost == false){
 		this.lost == true;
+		location.reload();
 	}
 
 
@@ -163,10 +165,12 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  if(station.name == 'mine'){
 		  this.fuel += coal;
 		  station.inventory.coal -= coal;
+		  this.owner.earn_money(-1 * coal * station.coalTradePrice);
 	  }
 	  if(station.name == 'factory'){
 		  station.inventory.coal += coal;
 		  this.fuel -= coal;
+		  this.owner.earn_money(coal * station.coalTradePrice);
 	  }
   }
 
