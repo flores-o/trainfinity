@@ -18,20 +18,27 @@ GAME STORY:
 - you are generating 100$/minute so the bank give you a loan of 10000$. You can now build a...
 
 GAME FEATURES:
-- introduce money
-- paid money to sell coal to factories
-- achievement: money per minute
+- [x] introduce money
+- [x] paid money to sell coal to factories
+- [x] achievement: money per minute
+- pause game
+- **delete railway**
 - factories produce steel with 100 coal
 - factorioes buy steel for more money
 - use money to buy vagons so that train last longer
 - mines get upgraded as game progresses
+- buy bridges with money
+- intermediary stations
+- show current game goal
 
 PROGRAMMABLE FEATURES:
-- PROGRAMMABLE (write access to player) TRAINS
+- **make code not hackable**
+- UX feedback whe update code
+- [x] PROGRAMMABLE (write access to player) TRAINS
 - PROGRAMMABLE (read access to player) mines and factories
-- give access to memory (e.g. global dictionary)
+- [x] give access to memory (e.g. global dictionary)
 - make interaction happen after stop train
-- access to station and name trains?
+- [x] access to station and name trains?
 - code size -> train speed
 
 BUGS:

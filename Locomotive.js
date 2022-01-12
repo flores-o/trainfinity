@@ -162,14 +162,21 @@ class Locomotive extends Phaser.GameObjects.Sprite {
   }
 
   tradeWithStation(station, coal){
-	  if(station.name == 'mine'){
-		  this.fuel += coal;
+	  if (coal < 0) {
+		  ;debugger
+		  throw new Error('You are trading negative coal (' + coal + ' coal units) with station '+station.name) ;
+	  }
+	  if(station.name.includes('mine')){
+		  coal = Math.min(coal, station.inventory.coal, this.fuel_capacity - this.fuel);
 		  station.inventory.coal -= coal;
+		  this.fuel = Math.min(this.fuel + coal, this.fuel_capacity);
 		  this.owner.earn_money(-1 * coal * station.coalTradePrice);
 	  }
-	  if(station.name == 'factory'){
+	  if(station.name.includes('factory')){
+		  coal = Math.min(coal, this.fuel);
 		  station.inventory.coal += coal;
 		  this.fuel -= coal;
+		  this.owner.earn_coal(coal);
 		  this.owner.earn_money(coal * station.coalTradePrice);
 	  }
   }
@@ -190,7 +197,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		document.getElementById("working-code").innerHTML = newSavedCode;
 	  } catch(err) {
 		  ;debugger
-		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n"+err.stack);
+		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n" + err.message + "\n\n"+err.stack);
 		  eval(
 			document.getElementById("working-code").innerHTML
 		  );

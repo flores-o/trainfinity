@@ -26,11 +26,13 @@ class Creator {
   }
 
   _createPlayer(){
-	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE, "$0", {fontSize: '30px'});
-	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "0$/minute", {fontSize: '30px'});
+	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "Next Achievement (#1): Bring 100 units of coal to a factory", {fontSize: '25px', backgroundColor: 'black'});
+	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "$0", {fontSize: '30px'});
+	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 3, "0 coal/minute", {fontSize: '30px'});
 	this._game.add.existing(moneyText);
 	this._game.add.existing(moneyPMText);
-	this._game.player = new Player(moneyText, moneyPMText);
+	this._game.add.existing(goalText);
+	this._game.player = new Player(moneyText, moneyPMText, goalText);
   }
 
   _createGrass() {
@@ -91,6 +93,7 @@ class Creator {
 
   _createBuilding(name, x, y, inventory) {
 	let buildingText = new Phaser.GameObjects.Text(this._game, x + constants.TILESIZE / 2, y - constants.TILESIZE / 2, name, { fontSize: '14px'});
+	buildingText.setDepth(10);
     let building = new Building(this._game, x, y, name, inventory, buildingText) ;
     this._game.add.existing(building);
     this._game.add.existing(buildingText);

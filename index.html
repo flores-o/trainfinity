@@ -26,13 +26,13 @@
 <script>
 	var starting_code = `// this Javascript code runs all the time a train enters a a station
 
-if (station.name == 'mine') {
-   var coalToBuy = Math.min(this.fuel_capacity - this.fuel, station.inventory.coal)
+if (station.name.includes('mine')) {
+   var coalToBuy = station.getAvailableCoal(); // buy all the coal the train can carry
    this.tradeWithStation(station, coalToBuy);
    this.waitAtStation(1000); // wait 1 second **after** trading before leaving
 }
-if (station.name == 'factory') {
-   var coalToSell = this.fuel / 2;
+if (station.name.includes('factory')) {
+   var coalToSell = this.fuel / 2; // sell half the coal the train is carrying
    this.tradeWithStation(station, coalToSell);
    this.waitAtStation(1000); // wait 1 second **after** trading before leaving
 }
