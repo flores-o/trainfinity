@@ -26,20 +26,44 @@
 <script>
 	var starting_code = `// this Javascript code runs all the time a train enters a a station
 
-if (station.name.includes('mine')) {
-   var coalToBuy = station.getAvailableCoal(); // buy all the coal the train can carry
-   this.tradeWithStation(station, coalToBuy);
-   this.waitAtStation(1000); // wait 1 second **after** trading before leaving
+if (station.isMine()) {
+   // buy all the coal the train can carry
+   let coal = station.getAvailableCoal(); 
+   this.tradeWithStation(station, coal);
+
+   // after trading wait one second before leaving
+   this.waitAtStation(1000); 
 }
-if (station.name.includes('factory')) {
-   var coalToSell = this.fuel / 2; // sell half the coal the train is carrying
-   this.tradeWithStation(station, coalToSell);
-   this.waitAtStation(1000); // wait 1 second **after** trading before leaving
+if (station.isFactory()) {
+   // sell half the coal the train is carrying
+   let coal = this.getAvailableFuel() / 2; 
+   this.tradeWithStation(station, coal);
+
+   // after trading wait half second before leaving
+   this.waitAtStation(500); 
 }
 
-// you can try more advanced stuff
-
-this.rememberForNextTime = 1;
+// 
+// DOCS
+//
+// -- Station -- 
+// station.isMine()
+// station.isFactory()
+// station.getName()
+// station.getAvailableCoal()
+// station.setMemory(key, value)
+// station.getMemory(key) -> value
+//
+// -- Locomotive (this) -- 
+// this.tradeWithStation(station: Station, coal: int)  
+// this.waitAtStation(milliseconds: int)
+// this.getAvailableFuel()
+// this.setMemory(key, value)
+// this.getMemory(key) -> value
+//
+//
+// (alex) TODO: move tradeWithStation to 
+// giveCoalToStation(coal: int), getCoalFromStation(coal: int)
 `;
 	document.getElementById("working-code").innerHTML = starting_code;
 	document.getElementById("saved-code").innerHTML = starting_code;
@@ -149,7 +173,8 @@ this.rememberForNextTime = 1;
 
     createActionSelection(this);
 
-    new Creator(this).create();
+    this._creator = new Creator(this);
+    this._creator.create();
 
     this.input.on('pointerdown', function (pointer) {
       if (pointer.buttons == 1) {

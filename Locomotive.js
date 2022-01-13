@@ -37,6 +37,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	}
 	this.lost = false;
 	this.owner = player;
+	this.playerMemory = {};
 
     this._addPathOfCurrentRail();
   }
@@ -163,16 +164,15 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
   tradeWithStation(station, coal){
 	  if (coal < 0) {
-		  ;debugger
-		  throw new Error('You are trading negative coal (' + coal + ' coal units) with station '+station.name) ;
+		  coal = 0
 	  }
-	  if(station.name.includes('mine')){
+	  if(station.isMine()){
 		  coal = Math.min(coal, station.inventory.coal, this.fuel_capacity - this.fuel);
 		  station.inventory.coal -= coal;
 		  this.fuel = Math.min(this.fuel + coal, this.fuel_capacity);
 		  this.owner.earn_money(-1 * coal * station.coalTradePrice);
 	  }
-	  if(station.name.includes('factory')){
+	  if(station.isFactory()){
 		  coal = Math.min(coal, this.fuel);
 		  station.inventory.coal += coal;
 		  this.fuel -= coal;
@@ -183,6 +183,10 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
   waitAtStation(milliseconds){
 	  this.stoppedTime = milliseconds;
+  }
+
+  getAvailableFuel(){
+	  return this.fuel;
   }
 
   stopAt(station){
@@ -196,7 +200,6 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		  );
 		document.getElementById("working-code").innerHTML = newSavedCode;
 	  } catch(err) {
-		  ;debugger
 		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n" + err.message + "\n\n"+err.stack);
 		  eval(
 			document.getElementById("working-code").innerHTML
@@ -204,6 +207,14 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  }
 	  // FINISH GAME EDITABLE CODE
 
+  }
+
+  setMemory(key, value){
+	  this.playerMemory[key] = value;
+  }
+
+  getMemory(key){
+	  return this.playerMemory[key];
   }
 
 }

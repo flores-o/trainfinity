@@ -9,4 +9,6 @@ let GRID_MAX_Y = 800;
 let FACTORIES = 1;
 let MINES = 3;
 
+let money_enabled = false;
+
 export {TILESIZE, GRID_MAX_X, GRID_MIN_X, GRID_MAX_Y, GRID_MIN_Y, FACTORIES, MINES}

@@ -18,11 +18,12 @@ GAME STORY:
 - you are generating 100$/minute so the bank give you a loan of 10000$. You can now build a...
 
 GAME FEATURES:
+- [ ] **delete railway**
+- [ ] **fix unreadble text when two text boxes collide**
 - [x] introduce money
 - [x] paid money to sell coal to factories
 - [x] achievement: money per minute
 - pause game
-- **delete railway**
 - factories produce steel with 100 coal
 - factorioes buy steel for more money
 - use money to buy vagons so that train last longer
@@ -32,7 +33,7 @@ GAME FEATURES:
 - show current game goal
 
 PROGRAMMABLE FEATURES:
-- **make code not hackable**
+- **make code not hackable (all getter and setters, don't access directly)**
 - UX feedback whe update code
 - [x] PROGRAMMABLE (write access to player) TRAINS
 - PROGRAMMABLE (read access to player) mines and factories

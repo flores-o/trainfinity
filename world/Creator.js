@@ -20,19 +20,19 @@ class Creator {
   create() {
     this._createGrass();
     this._createWater()
-    this._createFactories();
-    this._createMines();
+    this._createFactories(constants.FACTORIES);
+    this._createMines(constants.MINES);
 	this._createPlayer();
   }
 
   _createPlayer(){
-	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "Next Achievement (#1): Bring 100 units of coal to a factory", {fontSize: '25px', backgroundColor: 'black'});
-	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "$0", {fontSize: '30px'});
-	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 3, "0 coal/minute", {fontSize: '30px'});
+	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "Next Achievement (Railway Engineer 1): Bring 100 units of coal to the factories", {fontSize: '20px', backgroundColor: 'black'});
+	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 3, "$0", {fontSize: '30px'});
+	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "0 coal/minute", {fontSize: '30px'});
 	this._game.add.existing(moneyText);
 	this._game.add.existing(moneyPMText);
 	this._game.add.existing(goalText);
-	this._game.player = new Player(moneyText, moneyPMText, goalText);
+	this._game.player = new Player(moneyText, moneyPMText, goalText, this._game);
   }
 
   _createGrass() {
@@ -43,33 +43,40 @@ class Creator {
     }
   }
 
-  _createFactories() {
-    this._game.stations.push(this._createBuildings( 'factory', constants.FACTORIES));
+  _createFactories(number, level) {
+    this._game.stations.push(this._createBuildings( 'factory', number, {coal: 0}, level));
   }
 
-  _createMines() {
-    this._game.stations.push(this._createBuildings( 'mine', constants.MINES, {coal: 0}));
+  _createMines(number, level) {
+    this._game.stations.push(this._createBuildings( 'mine', number, {coal: 0}, level));
   }
 
-  _createBuildings(name, count, initial_inventory) {
+  _createBuildings(name, count, initial_inventory, level) {
     let roundToNearestTile = x => this._tileSize * Math.round(x / this._tileSize);
 	var buildings = [];
     for (let i = 0; i < count; i++) {
-	  let isOnWater = true;
+	  let isBusySpace = true;
 	  var x;
 	  var y;
-	  while (isOnWater) {
+	  var gameVictoryCounter = 0;
+	  var maxCounter = 1000000;
+	  while (isBusySpace && gameVictoryCounter < maxCounter) {
 		  x = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_X + 100, constants.GRID_MAX_X - 100));
 		  y = roundToNearestTile(Phaser.Math.RND.between(constants.GRID_MIN_Y + 100, constants.GRID_MAX_Y - 100));
 		  let currentBlock = this._game.grid.get({x: x, y: y});
-		  if (typeof currentBlock != 'undefined' && currentBlock.name == 'water'){
-			  isOnWater = true;
+		  if (typeof currentBlock != 'undefined'){
+			  isBusySpace = true;
 		  } else {
-			  isOnWater = false;
+			  isBusySpace = false;
+		  }
+		  gameVictoryCounter += 1;
+		  if (gameVictoryCounter == maxCounter){
+			  alert("wait.. I think.. you just won the game?????!!!!! YOU FILLED THE ENTIRE MAP!! YOU ARE THE BEST RAILWAY ENGINEER!!!!! YOU JUST WON THE INTERNET");
+			  gameVictoryCounter += 1;
 		  }
 	  }
 	  
-	  buildings.push(this._createBuilding(name, x, y, initial_inventory));
+	  buildings.push(this._createBuilding(name, x, y, initial_inventory, level));
     }
 	return buildings;
   }
@@ -91,10 +98,10 @@ class Creator {
     }
   }
 
-  _createBuilding(name, x, y, inventory) {
+  _createBuilding(name, x, y, inventory, level) {
 	let buildingText = new Phaser.GameObjects.Text(this._game, x + constants.TILESIZE / 2, y - constants.TILESIZE / 2, name, { fontSize: '14px'});
 	buildingText.setDepth(10);
-    let building = new Building(this._game, x, y, name, inventory, buildingText) ;
+    let building = new Building(this._game, x, y, name, inventory, buildingText, level) ;
     this._game.add.existing(building);
     this._game.add.existing(buildingText);
     this._game.grid.set({x, y}, building)

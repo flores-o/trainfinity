@@ -2,7 +2,7 @@
  * @solbiatialessandro
  */
 class Player {
-  constructor(moneyText, moneyPMText, goalText) {
+  constructor(moneyText, moneyPMText, goalText, _game) {
 	  this.money = 300;
 	  this.coal_earned = [];
 	  this.moneyText = moneyText;
@@ -10,9 +10,24 @@ class Player {
 	  this.moneyText.setText("$" + this.money.toFixed(1));
 	  this.moneyText.visible = false;
 	  this.moneyPMText.visible = false;
-	  this.victoryFactory = false;
-	  this.victoryMPM = false;
 	  this.goalText = goalText;
+	  this._game = _game;
+
+	  this.level = 0;
+	  this.cpm_target = 0;
+
+  }
+
+  levelUp(){
+	  this.level += 1;
+	  this.cpm_target += 100;
+	  this.goalText.setText("Next Achievement (Railway Engineer "+(this.level+1)+"): Bring "+this.cpm_target+" units of coal/minute to a factory");
+  }
+
+  levelCompleted(cpm){
+	  this._game._creator._createFactories(1);
+	  this.levelUp();
+	  alert("Wow! Your railway is bringing to factories "+cpm+"coal/minute! You attracted new factories to move in the valley! Also.. you are now a level "+this.level+"railway engineer, congrats! \n\n Now, can you build a railway that brings to factories "+(this.cpm_target)+" coal/minute ?");
   }
 
   earn_coal(coal){
@@ -32,13 +47,10 @@ class Player {
   }
 
   update(){
-	  var mpm = this.coal_per_minute().toFixed(1) ;
-	  this.moneyPMText.setText("" + mpm + " coal/minute");
-	  if (mpm > 200 && this.victoryFactory == true && this.victoryMPM == false){
-		  alert("Wowowow! Your railway is earning $"+mpm+"/minute! You are a great railway engineer. \n\n You now have a solid revenue stream! The factory is impressed and decides to offer you a loan of $50.000k to further improve your railway. What will you build next?");
-		  this.victoryMPM = true;
-		  this.money += 50000;
-		  this._scene.player.goalText.setText("Next Achievement (#3): the railway MUST GROW");
+	  var cpm = this.coal_per_minute().toFixed(1) ;
+	  this.moneyPMText.setText("" + cpm + " coal/minute");
+	  if (this.level > 0 && cpm > this.cpm_target){
+		  this.levelCompleted(cpm);
 	  }
   }
 }
