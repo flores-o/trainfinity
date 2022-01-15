@@ -117,7 +117,6 @@ class Building extends Phaser.GameObjects.Sprite {
 
 			  }
 			  alert(success_text + "\nNow, can you build a better railway that brings 100 coal/minute to the factories?");
-			  ;debugger
 			  this._scene._creator._createMines(1, 0);
 			  return;
 		  }

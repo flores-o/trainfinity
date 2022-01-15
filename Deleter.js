@@ -13,8 +13,10 @@ class Deleter {
   }
 
   pointerDown(position){
-	  ;debugger
 	 var toKill = this.grid.get(position);
+	 if (typeof toKill != 'undefined' && toKill.constructor.name == 'RailSegment'){
+		 toKill.disconnectFromAdjacentRails();
+	 }
 	 this.physicsGroup.remove(toKill, true, true);
 	 delete this.grid._buildings['x' + position.x + 'y' + position.y];
   }
