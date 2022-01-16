@@ -63,22 +63,25 @@ class RailSegment extends Phaser.GameObjects.Sprite {
   }
 
   disconnectFromAdjacentRails(){
+	  try{
 	  var adjacentRailsPositions = this.scene.grid.adjacent({x: this.x, y: this.y});
 	  var northRail = this.scene.grid.get(adjacentRailsPositions[0]);
-	  if (typeof northRail != 'undefined'){
+	  if (this.scene.grid.isRailSegment(northRail)){
 		  northRail.directions.delete('S');
 	  }
 	  var southRail = this.scene.grid.get(adjacentRailsPositions[1]);
-	  if (typeof southRail != 'undefined'){
+	  if (this.scene.grid.isRailSegment(southRail)){
 		  southRail.directions.delete('N');
 	  }
 	  var westRail = this.scene.grid.get(adjacentRailsPositions[2]);
-	  if (typeof westRail != 'undefined'){
+	  if (this.scene.grid.isRailSegment(westRail)){
 		  westRail.directions.delete('E');
 	  }
 	  var eastRail = this.scene.grid.get(adjacentRailsPositions[3]);
-	  if (typeof eastRail != 'undefined'){
+	  if (this.scene.grid.isRailSegment(eastRail)){
 		  eastRail.directions.delete('W');
+	  }} catch (err) {
+		  console.log(err);
 	  }
   }
 

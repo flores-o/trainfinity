@@ -20,17 +20,32 @@ class TrainBuilder extends ActionController {
     return this.positions.filter((x) => !this.grid.hasRail(x));
   }
 
+  pointerUp(){
+	  if(this._scene.availableTrains.length == 0){
+		  return false
+	  } else {
+		  this._scene.availableTrains.pop();
+		  return super.pointerUp();
+	  }
+  }
+
   _createGameObjects() {
+	var trainCapacity;
+	if(this._scene.availableTrains.length == 0){
+		  trainCapacity = 0;
+	  } else {
+		  trainCapacity = this._scene.availableTrains[this._scene.availableTrains.length - 1];
+	  }
     let locomotivePosition = this.positions[0];
     let wagonPositions = this.positions.slice(1);
 	let locomotiveText = new Phaser.GameObjects.Text(this._scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");
-    let leader = new Locomotive(this._scene, this.grid, locomotivePosition.x, locomotivePosition.y, this._direction(), locomotiveText, this._scene.player);
+    let leader = new Locomotive(this._scene, this.grid, locomotivePosition.x, locomotivePosition.y, this._direction(), locomotiveText, this._scene.player, trainCapacity);
     this.gameObjects = [leader, locomotiveText];
     for (let position of wagonPositions) {
       let wagon = new Wagon(this._scene, position.x, position.y, leader);
       this.gameObjects.push(wagon);
       leader = wagon
-    }
+	}
   }
 
   _writeToGrid(position, building) {

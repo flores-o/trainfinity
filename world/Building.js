@@ -72,6 +72,10 @@ class Building extends Phaser.GameObjects.Sprite {
 	  return this.name.includes('factory');
   }
 
+  getCoalMiningRate(){
+	  return this.coalGenerationFactor;
+  }
+
   _setText(){
 	  // breaks if buildingText is undefined
 	  var _text = "("+ this.level+ ")" + this.name + "\n";
@@ -107,7 +111,7 @@ class Building extends Phaser.GameObjects.Sprite {
 			  this.inventory.coal >= 100 &&
 			  this._scene.player.level == 0){
 			  this.level += 1;
-			  this._scene.player.levelUp();
+			  var reward = this._scene.player.levelUp();
 			  this._scene.player.moneyText.visible = constants.money_enabled;
 			  this._scene.player.moneyPMText.visible = true;
 
@@ -116,7 +120,7 @@ class Building extends Phaser.GameObjects.Sprite {
 				  success_text += " Your earned the factory's and you can now sell them carbon at $"+this.coalTradePrice.toFixed(2)+"/unit!\n";
 
 			  }
-			  alert(success_text + "\nNow, can you build a better railway that brings 100 coal/minute to the factories?");
+			  alert(success_text + "\n\nNow, can you build a better railway that brings 100 coal/minute to the factories?");
 			  this._scene._creator._createMines(1, 0);
 			  return;
 		  }
@@ -125,7 +129,12 @@ class Building extends Phaser.GameObjects.Sprite {
 		  // (coal for next level exponentially higher)
 		  if (this.isFactory() &&
 			  this.inventory.coal >= this.factory_coalForLevel(this.level)){
-			  this._scene._creator._createMines(1, this.level);
+			  if (Math.random() > 0.5){
+				  this._scene._creator._createMines(1, this.level);
+			  } else {
+				  this._scene.availableTrains.push(this.level);
+				  this._scene.availableTrains.push(this.level);
+			  }
 			  this.level += 1;
 		  }
 	  }

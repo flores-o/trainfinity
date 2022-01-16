@@ -14,8 +14,9 @@ class Locomotive extends Phaser.GameObjects.Sprite {
    * @param y
    * @param The direction the locomotive is heading, e.g. "N"
    */
-  constructor(scene, grid, x, y, direction, locomotiveText, player) {
+  constructor(scene, grid, x, y, direction, locomotiveText, player, capacity) {
     super(scene, x, y, 'locomotive');
+	console.log(capacity);
     this.grid = grid;
     this.pathProgress = 0;
     this.graphics = scene.add.graphics();
@@ -29,7 +30,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	// @SolbiatiAlessandro
 	this.fuel = 10;
-	this.fuel_capacity = 100;
+	this.fuel_capacity = 100 * capacity;
 	this.hasText = false;
 	if (typeof locomotiveText != 'undefined') {
 		this.hasText = true;
@@ -62,7 +63,8 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	if (this.fuel <= 0 && this.lost == false){
 		this.lost == true;
-		location.reload();
+		throw "YOU LOST THE GAME!"
+		//location.reload();
 	}
 
 
@@ -71,9 +73,16 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  this.fuel -= pathProgressDelta;
 	  if(this.hasText){
 		  if (this.fuel > 0){
-			  this.locomotiveText.setText("Fuel: " + Math.floor(this.fuel));
+			  this.locomotiveText.setText( Math.floor(this.fuel) + "/"+ this.fuel_capacity);
 		  } else {
 			  this.locomotiveText.setText("OUT OF FUEL!");
+		  }
+		  if (this.fuel < 10){
+			  this.locomotiveText.setStyle({ fontSize: '30px', backgroundColor: 'red' })
+
+		  } else {
+			  this.locomotiveText.setStyle({ fontSize: '14px'})
+
 		  }
 
 	  }

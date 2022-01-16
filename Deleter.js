@@ -14,7 +14,7 @@ class Deleter {
 
   pointerDown(position){
 	 var toKill = this.grid.get(position);
-	 if (typeof toKill != 'undefined' && toKill.constructor.name == 'RailSegment'){
+	 if (this.grid.isRailSegment(toKill)){
 		 toKill.disconnectFromAdjacentRails();
 	 }
 	 this.physicsGroup.remove(toKill, true, true);

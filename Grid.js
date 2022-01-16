@@ -170,6 +170,10 @@ class Grid {
     }
     return array;
   }
+
+  isRailSegment(building){
+	return typeof building != 'undefined' && building.constructor.name == 'RailSegment'
+  }
 }
 
 export {Grid};

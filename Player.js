@@ -12,6 +12,12 @@ class Player {
 	  this.moneyPMText.visible = false;
 	  this.goalText = goalText;
 	  this._game = _game;
+	  this._game.availableTrains = [1, 0]; 
+	  // array of int, where every element is 
+	  // a train that can be built of capacity (int)
+	  // TODO: hack, every train is actually two ints for when I click on the train
+	  // in pops one
+
 
 	  this.level = 0;
 	  this.cpm_target = 0;
@@ -21,17 +27,19 @@ class Player {
   levelUp(){
 	  this.level += 1;
 	  this.cpm_target += 100;
-	  this.goalText.setText("Next Achievement (Railway Engineer "+(this.level+1)+"): Bring "+this.cpm_target+" units of coal/minute to a factory");
+	  this.goalText.setText("Next Achievement (Railway Engineer "+(this.level+1)+"): Bring "+this.cpm_target+" units of coal/minute to the factories");
   }
 
   levelCompleted(cpm){
 	  this._game._creator._createFactories(1);
 	  this.levelUp();
-	  alert("Wow! Your railway is bringing to factories "+cpm+"coal/minute! You attracted new factories to move in the valley! Also.. you are now a level "+this.level+"railway engineer, congrats! \n\n Now, can you build a railway that brings to factories "+(this.cpm_target)+" coal/minute ?");
+	  alert("Wow! Your railway is bringing to factories "+cpm+"coal/minute! You attracted new factories to move in the valley! Also.. you are now a level "+this.level+" railway engineer, congrats! \n\n Now, can you build a railway that brings to factories "+(this.cpm_target)+" coal/minute ?");
   }
 
   earn_coal(coal){
-	  this.coal_earned.push({coal: coal, time: Date.now()});
+	  if (this.level > 0){
+		  this.coal_earned.push({coal: coal, time: Date.now()});
+	  }
   }
 
   earn_money(money){
