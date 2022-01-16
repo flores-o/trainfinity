@@ -156,14 +156,6 @@ if (station.isFactory()) {
 
   function create() {
 
-    var help = this.add.text(16, 16, 'Left-click to copy the tiles in the\nwhite rectangle to the black rectangle.', {
-        fontSize: '18px',
-        padding: { x: 10, y: 5 },
-        backgroundColor: '#000000',
-        fill: '#ffffff'
-    });
-    help.setScrollFactor(0);
-
     // To add a static sprite for GUI, use this.add.image(...).setScrollFactor(0)
 
     this.cameras.main.setBounds(constants.GRID_MIN_X, constants.GRID_MIN_Y, constants.GRID_MAX_X, constants.GRID_MAX_Y);
