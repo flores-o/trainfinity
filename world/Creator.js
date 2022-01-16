@@ -26,12 +26,14 @@ class Creator {
   }
 
   _createPlayer(){
+        var onboardingInstructions = new Phaser.GameObjects.Text(this._game, constants.TILESIZE * 4, constants.TILESIZE * 24, "Click on the railway asset on the left and drag on drop to create", {fontSize: '20px', backgroundColor: 'black'});
 	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "Next Achievement (Railway Engineer 1): Bring 100 units of coal to the factories", {fontSize: '20px', backgroundColor: 'black'});
 	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 3, "$0", {fontSize: '30px'});
 	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "0 coal/minute", {fontSize: '30px'});
 	this._game.add.existing(moneyText);
 	this._game.add.existing(moneyPMText);
 	this._game.add.existing(goalText);
+        this._game.add.existing(onboardingInstructions);
 	this._game.player = new Player(moneyText, moneyPMText, goalText, this._game);
   }
 
