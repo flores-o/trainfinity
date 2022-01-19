@@ -10,17 +10,17 @@
 <body style="background-color:#3667FF;">
 	<img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
 	<div id="player-logs"
-		style="position: absolute;left:0px;bottom:0px;width:60%;color:white;font-family:monospace;height:78px;overflow:scroll;"></div>
+		style="position: absolute;left:0px;bottom:0px;width:60%;color:white;font-family:monospace;height:78px;overflow:overlay;z-index:-1;"></div>
 
-	<div class="row">
+	<div class="row" style="width:100%">
 		<div id="game-canvas" class="col-7" ></div>
 		<div id="IDE" class="col" style="color:white;height:800px;background-color:#3667FF;">
 			<br/>
-			<textarea id="code-input" style="
+			<textarea id="code-input" 
 
-border: solid 1px white;width: 478px;height: 600px;position: absolute;top: 124px;right: 106px;z-index: 2;height: 386px;background-color: black;color: lawngreen;font: revert;padding: 10px;
-
-				" ></textarea>
+style="border: solid 1px white;width: 520px;position: absolute;top: 80px;right: 102px;z-index: 2;height: 400px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
+				
+				></textarea>
 			<div id ="saved-code" style="display:none"></div>
 			<div id ="working-code"style="display:none"></div>
 			
@@ -36,7 +36,7 @@ border: solid 1px white;width: 478px;height: 600px;position: absolute;top: 124px
     font-family: monospace;
     padding: 5px;
     position: absolute;
-    top: 457px;
+    top: 430px;
     right: 122px;
     z-index: 3;
 
@@ -64,6 +64,7 @@ if (station.isFactory()) {
 
    // after trading wait half second before leaving
    this.waitAtStation(500); 
+   this.print("test")
 }
 
 // 
@@ -85,6 +86,7 @@ if (station.isFactory()) {
 // this.getAvailableFuel()
 // this.setMemory(key, value)
 // this.getMemory(key) -> value
+// this.print(text)
 //
 `;
 	document.getElementById("working-code").innerHTML = starting_code;
@@ -113,7 +115,8 @@ if (station.isFactory()) {
   import * as constants from "./world/constants.js"
 
   let WIDTH = 1100;
-  let HEIGHT = 800;
+;debugger
+  let HEIGHT = constants.HEIGHT;
   let TILESIZE = 32;
 
   let config = {
@@ -202,7 +205,6 @@ if (station.isFactory()) {
     this.temporaryGameObjects = [];
     this.selectedActionController = this.railBuilder;
 
-    createActionSelection(this);
 
     this._creator = new Creator(this);
     this._creator.create();
@@ -318,33 +320,6 @@ if (station.isFactory()) {
     //locomotive.collideWith(building);
   }
 
-  function createActionSelection(game) {
-    let actions = [{
-      'image': 'rail',
-      'controller': game.railBuilder,
-    }, {
-      'image': 'locomotive',
-      'controller': game.trainBuilder,
-    }, {
-      'image': 'bomb',
-      'controller': game.deleter,
-    }];
-    let x = TILESIZE;
-    let y = HEIGHT - TILESIZE;
-    for (let action of actions) {
-      let image = game.add.image(x, y, action.image);
-	  if (action['image'] == 'locomotive'){
-	  	game._locomotiveBuilder = image;
-	  }
-      image.setScrollFactor(0);
-      image.setInteractive();
-      image.depth = 1000; // Always show in front
-      image.on('pointerdown', () => {
-        game.selectedActionController = action.controller;
-      });
-      x += TILESIZE;
-    }
-  }
 
   function update() {
   	this.player.update();

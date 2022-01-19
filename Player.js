@@ -1,3 +1,4 @@
+import * as constants from "./world/constants.js"
 /**
  * @solbiatialessandro
  */
@@ -12,20 +13,56 @@ class Player {
 	  this.moneyPMText.visible = false;
 	  this.goalText = goalText;
 	  this._game = _game;
-	  this._game.availableTrains = [1]; 
-	  this.ownedTrains = 0
-	  this.canBuildTrain = true
-	  // array of int, where every element is 
-	  // a train that can be built of capacity (int)
-	  // TODO: hack, every train is actually two ints for when I click on the train
-	  // in pops one
+      this.actions = [{
+        'image': 'rail',
+        'controller': this._game.railBuilder,
+		'quantity': -1,
+		'level': 0,
+      }, {
+        'image': 'locomotive',
+        'controller': this._game.trainBuilder,
+		'quantity': 1,
+		'level': 0,
+      }, {
+        'image': 'bomb',
+        'controller': this._game.deleter,
+		'quantity': -1,
+		'level': 0,
+      }];
+
 
 
 	  this.level = 0;
 	  this.cpm_target = 0;
 
+	  this.create()
+
 
   }
+
+  // initial routine to create all player related interfaces
+  create(){
+    this.createActionSelection();
+  }
+
+  createActionSelection() {
+    let x = constants.TILESIZE;
+    let y = constants.HEIGHT - constants.TILESIZE;
+    for (let action of this.actions) {
+      let image = this._game.add.image(x, y, action.image);
+	  if (action['image'] == 'locomotive'){
+	  	this._game._locomotiveBuilder = image;
+	  }
+      image.setScrollFactor(0);
+      image.setInteractive();
+      image.depth = 1000; // Always show in front
+      image.on('pointerdown', () => {
+        this._game.selectedActionController = action.controller;
+      });
+      x += constants.TILESIZE;
+    }
+  }
+
 
   levelUp(){
 	  this.level += 1;

@@ -38,7 +38,7 @@ class TrainBuilder extends ActionController {
 
   _createGameObjects() {
 	var trainCapacity;
-    trainCapacity = this._scene.availableTrains[this._scene.availableTrains.length - 1];
+    trainCapacity = 1
     let locomotivePosition = this.positions[0];
     let wagonPositions = this.positions.slice(1);
 	let locomotiveText = new Phaser.GameObjects.Text(this._scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");

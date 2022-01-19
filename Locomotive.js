@@ -40,9 +40,9 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	this.lost = false;
 	this.owner = player;
 	this.playerMemory = {};
-	this.owner.ownedTrains += 1
+	this.owner.ownedTrains += 1 // TODO: bug, this get called on ghost train
 	this.name = 'locomotive' + this.owner.ownedTrains
-	this.owner.log("new locomotive ("+this.name+", capacity "+this.capacity+") created")
+	//this.owner.log("new locomotive ("+this.name+", capacity "+this.capacity+") created")
 
     this._addPathOfCurrentRail();
   }
@@ -236,6 +236,10 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
   getMemory(key){
 	  return this.playerMemory[key];
+  }
+
+  print(text){
+	  this.owner.log("["+this.name+"] "+text)
   }
 
 }
