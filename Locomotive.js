@@ -187,7 +187,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  this.fuel -= coal;
 	  this.owner.earn_coal(coal);
 	  this.owner.earn_money(coal * station.coalTradePrice);
-	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel+" fuel. Gives  "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
+	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel.toFixed(2)+" fuel. Gives  "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
   }
 
   getCoalFromStation(station, coal){
@@ -199,7 +199,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  station.inventory.coal -= coal;
 	  this.fuel = Math.min(this.fuel + coal, this.fuel_capacity);
 	  this.owner.earn_money(-1 * coal * station.coalTradePrice);
-	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel+" fuel. Gets "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
+	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel.toFixed(2)+" fuel. Gets "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
   }
 
   waitAtStation(milliseconds){
