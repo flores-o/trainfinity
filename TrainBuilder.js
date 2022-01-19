@@ -20,22 +20,25 @@ class TrainBuilder extends ActionController {
     return this.positions.filter((x) => !this.grid.hasRail(x));
   }
 
+	
   pointerUp(){
-	  if(this._scene.availableTrains.length == 0){
-		  return false
-	  } else {
-		  this._scene.availableTrains.pop();
-		  return super.pointerUp();
-	  }
+	  this._scene.player.canBuildTrain = false
+	  this._scene._locomotiveBuilder.visible = false
+	  // TODO: bug, you can still create as many train as you want until you don't change to railway
+	  return super.pointerUp();
   }
+
+	/*
+  pointerDown(){
+	  this._scene.player.canBuildTrain = false
+	  this._scene._locomotiveBuilder.visible = false
+	  return super.pointerUp();
+
+  }*/
 
   _createGameObjects() {
 	var trainCapacity;
-	if(this._scene.availableTrains.length == 0){
-		  trainCapacity = 0;
-	  } else {
-		  trainCapacity = this._scene.availableTrains[this._scene.availableTrains.length - 1];
-	  }
+    trainCapacity = this._scene.availableTrains[this._scene.availableTrains.length - 1];
     let locomotivePosition = this.positions[0];
     let wagonPositions = this.positions.slice(1);
 	let locomotiveText = new Phaser.GameObjects.Text(this._scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");

@@ -1,33 +1,42 @@
 /**
- * @solbiatialessandro
+* @solbiatialessandro
  */
 import * as constants from "./constants.js"
 
 class Building extends Phaser.GameObjects.Sprite {
   // inventory is {coal: 24, money: 15}
   constructor(scene, x, y, name, inventory, buildingText, level) {
-    super(scene, x, y, name);
+    var imageName;
+	if (typeof level == 'undefined' || level == 0){
+		imageName = name 
+	} else {
+		imageName = name + '2'
+	}
+    super(scene, x, y, imageName);
+
+	if (typeof level == 'undefined') {
+		this.level = 0;
+	} else {
+		this.level = level;
+	}
 	
 	this._scene = scene;
 	this.setName(name + Math.floor(Math.random()*10000));
 	this.hasText = false;
 	this.timer = 0;
 	this.playerMemory = {}
-	if (typeof level == 'undefined') {
-		this.level = 0;
-	} else {
-		this.level = level;
-	}
 	switch(true){
 		case this.isMine():
 			  this.coalTradePrice = Math.random() * 3 + 1;
 			  this.coalGenerationFactor = Math.random() * 3 + 1;
 			  this.inventory = {coal: 0}
+		      this._scene.player.log("> new mine ("+this.name+ ", level "+ this.level+ ") created, extracts "+this.coalGenerationFactor+" coal every 5 seconds")
 			  break;
 		case this.isFactory():
 			  this.coalGenerationFactor = 0;
 			  this.coalTradePrice = Math.random() * 3 + 10;
 			  this.inventory = {coal: 0}
+		      this._scene.player.log("> new factory ("+this.name+ ", level "+ this.level+ ") created")
 			  break;
 	  }
 	if (typeof buildingText != 'undefined') {
@@ -102,7 +111,9 @@ class Building extends Phaser.GameObjects.Sprite {
 	  super.preUpdate(time, delta);
 	  this.timer += delta;
 	  if (this.timer > 5000){
-		  this.inventory.coal += this.coalGenerationFactor * (this.level + 1);
+		  var extractedCoal = this.coalGenerationFactor * (this.level + 1);
+		  this.inventory.coal += extractedCoal
+		  //this._scene.player.log(">["+this.name+"] extracted "+extractedCoal+" coal.") 
 		  this._setText();
 		  this.timer = 0;
 
@@ -110,6 +121,7 @@ class Building extends Phaser.GameObjects.Sprite {
 		  if ( this.isFactory() && 
 			  this.inventory.coal >= 100 &&
 			  this._scene.player.level == 0){
+			  this._scene.player.log(">["+this.name+"] is now a level 1 factory! It generated a level 0 mine")
 			  this.level += 1;
 			  var reward = this._scene.player.levelUp();
 			  this._scene.player.moneyText.visible = constants.money_enabled;
@@ -129,13 +141,17 @@ class Building extends Phaser.GameObjects.Sprite {
 		  // (coal for next level exponentially higher)
 		  if (this.isFactory() &&
 			  this.inventory.coal >= this.factory_coalForLevel(this.level)){
-			  if (Math.random() > 0.5){
+			  if (Math.random() > 10){
 				  this._scene._creator._createMines(1, this.level);
+				  this.level += 1;
+				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+"factory! It generated a level "+ (this.level - 1) + " mine")
 			  } else {
+				  this.level += 1;
 				  this._scene.availableTrains.push(this.level);
-				  this._scene.availableTrains.push(this.level);
+				  this._scene.player.canBuildTrain = true
+				  this._scene._locomotiveBuilder.visible = true
+				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+"factory! It generated a train with capacity " + (this.level  * 100))
 			  }
-			  this.level += 1;
 		  }
 	  }
 	  

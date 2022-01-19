@@ -17,6 +17,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
   constructor(scene, grid, x, y, direction, locomotiveText, player, capacity) {
     super(scene, x, y, 'locomotive');
 	console.log(capacity);
+	this.scene = scene
     this.grid = grid;
     this.pathProgress = 0;
     this.graphics = scene.add.graphics();
@@ -39,6 +40,9 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	this.lost = false;
 	this.owner = player;
 	this.playerMemory = {};
+	this.owner.ownedTrains += 1
+	this.name = 'locomotive' + this.owner.ownedTrains
+	this.owner.log("new locomotive ("+this.name+", capacity "+this.capacity+") created")
 
     this._addPathOfCurrentRail();
   }
@@ -63,6 +67,8 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 
 	if (this.fuel <= 0 && this.lost == false){
 		this.lost == true;
+		this.owner.log(">["+this.name+"] run out of fuel")
+		this.owner.log("YOU LOST THE GAME!")
 		throw "YOU LOST THE GAME!"
 		//location.reload();
 	}
@@ -171,23 +177,29 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     //this.path.draw(this.graphics);
   }
 
-  tradeWithStation(station, coal){
+  giveCoalToStation(station, coal){
 	  if (coal < 0) {
 		  coal = 0
 	  }
-	  if(station.isMine()){
-		  coal = Math.min(coal, station.inventory.coal, this.fuel_capacity - this.fuel);
-		  station.inventory.coal -= coal;
-		  this.fuel = Math.min(this.fuel + coal, this.fuel_capacity);
-		  this.owner.earn_money(-1 * coal * station.coalTradePrice);
+	  coal = Math.min(coal, this.fuel);
+	  station.inventory.coal += coal;
+	  var prevFuel = this.fuel
+	  this.fuel -= coal;
+	  this.owner.earn_coal(coal);
+	  this.owner.earn_money(coal * station.coalTradePrice);
+	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel+" fuel. Gives  "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
+  }
+
+  getCoalFromStation(station, coal){
+	  if (coal < 0) {
+		  coal = 0
 	  }
-	  if(station.isFactory()){
-		  coal = Math.min(coal, this.fuel);
-		  station.inventory.coal += coal;
-		  this.fuel -= coal;
-		  this.owner.earn_coal(coal);
-		  this.owner.earn_money(coal * station.coalTradePrice);
-	  }
+	  var prevFuel = this.fuel
+	  coal = Math.min(coal, station.inventory.coal, this.fuel_capacity - this.fuel);
+	  station.inventory.coal -= coal;
+	  this.fuel = Math.min(this.fuel + coal, this.fuel_capacity);
+	  this.owner.earn_money(-1 * coal * station.coalTradePrice);
+	  this.owner.log(">["+this.name+"] enters "+station.name+" with "+prevFuel+" fuel. Gets "+coal.toFixed(2)+" coal. Leaves the station with "+this.fuel.toFixed(2)+" fuel")
   }
 
   waitAtStation(milliseconds){

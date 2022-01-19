@@ -12,7 +12,9 @@ class Player {
 	  this.moneyPMText.visible = false;
 	  this.goalText = goalText;
 	  this._game = _game;
-	  this._game.availableTrains = [1, 0]; 
+	  this._game.availableTrains = [1]; 
+	  this.ownedTrains = 0
+	  this.canBuildTrain = true
 	  // array of int, where every element is 
 	  // a train that can be built of capacity (int)
 	  // TODO: hack, every train is actually two ints for when I click on the train
@@ -22,12 +24,13 @@ class Player {
 	  this.level = 0;
 	  this.cpm_target = 0;
 
+
   }
 
   levelUp(){
 	  this.level += 1;
 	  this.cpm_target += 100;
-	  this.goalText.setText("Next Achievement (Railway Engineer "+(this.level+1)+"): Bring "+this.cpm_target+" units of coal/minute to the factories");
+	  this.goalText.setText("⭐ Railway Engineer "+(this.level+1)+": Bring "+this.cpm_target+" units of coal/minute to the factories ⭐");
   }
 
   levelCompleted(cpm){
@@ -60,6 +63,12 @@ class Player {
 	  if (this.level > 0 && cpm > this.cpm_target){
 		  this.levelCompleted(cpm);
 	  }
+  }
+
+  log(text){
+	  var div = this._game._document.getElementById('player-logs');
+	  div.innerHTML += '<p class="playerlog" style="margin-bottom:0px">' + text + '</p>';
+	  div.scrollTop = div.scrollHeight;
   }
 }
 

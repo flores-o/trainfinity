@@ -18,22 +18,31 @@ class Creator {
   }
 
   create() {
+	this._createPlayer();
     this._createGrass();
     this._createWater()
     this._createFactories(constants.FACTORIES);
     this._createMines(constants.MINES);
-	this._createPlayer();
+
+	this._game.player.log(">[TUTORIAL][1/4] drag and drop railway (bottom left) onto the green part of the map")
+	  this._game.player.log(">[TUTORIAL][2/4] drag and drop train (bottom left) onto the railway")
+	  this._game.player.log(">[TUTORIAL][3/4] make sure the train doesn't run out of fuel by stopping at coal mines")
+	  this._game.player.log(">[TUTORIAL][4/4] bring 100 coal to the factories to become a Railway Engineer 1")
   }
 
   _createPlayer(){
+	  /*
         var onboardingInstructions = new Phaser.GameObjects.Text(this._game, constants.TILESIZE * 4, constants.TILESIZE * 24, "Click on the railway asset on the left and drag on drop to create", {fontSize: '20px', backgroundColor: 'black'});
-	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "Next Achievement (Railway Engineer 1): Bring 100 units of coal to the factories", {fontSize: '20px', backgroundColor: 'black'});
+        this._game.add.existing(onboardingInstructions);
+*/
+	var goalText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE , "⭐ Railway Engineer 1: Bring 100 units of coal to the factories ⭐", {fontSize: '20px', backgroundColor: 'black'});
+	goalText.depth = 1001
 	var moneyText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 3, "$0", {fontSize: '30px'});
 	var moneyPMText = new Phaser.GameObjects.Text(this._game, constants.TILESIZE, constants.TILESIZE * 2, "0 coal/minute", {fontSize: '30px'});
+	moneyPMText.depth = 1001
 	this._game.add.existing(moneyText);
 	this._game.add.existing(moneyPMText);
 	this._game.add.existing(goalText);
-        this._game.add.existing(onboardingInstructions);
 	this._game.player = new Player(moneyText, moneyPMText, goalText, this._game);
   }
 

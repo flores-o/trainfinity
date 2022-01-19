@@ -7,18 +7,41 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.js"></script>
   <script src="RailBuilder.js" type="module"></script>
 </head>
-<body style="background-color:black;">
+<body style="background-color:#3667FF;">
+	<img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
+	<div id="player-logs"
+		style="position: absolute;left:0px;bottom:0px;width:60%;color:white;font-family:monospace;height:78px;overflow:scroll;"></div>
 
 	<div class="row">
 		<div id="game-canvas" class="col-7" ></div>
-		<div id="IDE" class="col" style="color:white;height:800px;background-color:black;">
+		<div id="IDE" class="col" style="color:white;height:800px;background-color:#3667FF;">
 			<br/>
-			<p><i>All</i> trains are running this code. <b>When a train runs out of fuel you lose the game.</b> Good luck!</p>
-			<textarea id="code-input" style="border: solid 1px white; width: 100%; height: 600px;" ></textarea>
+			<textarea id="code-input" style="
+
+border: solid 1px white;width: 478px;height: 600px;position: absolute;top: 124px;right: 106px;z-index: 2;height: 386px;background-color: black;color: lawngreen;font: revert;padding: 10px;
+
+				" ></textarea>
 			<div id ="saved-code" style="display:none"></div>
 			<div id ="working-code"style="display:none"></div>
-			<button  onclick="updateCode()">Update Code</button>
-			<p><i>Warning: when you lose the game you lose your code!</i></p>
+			
+			<button  onclick="updateCode()"
+				style="
+
+
+    box-shadow: 2px 2px 9px black;
+    border-radius: 5px;
+    background-color: red;
+    color: white;
+    font-weight: bolder;
+    font-family: monospace;
+    padding: 5px;
+    position: absolute;
+    top: 457px;
+    right: 122px;
+    z-index: 3;
+
+					   "
+					   >Update Code</button>
 			</div>
 		</div>
 	</div>
@@ -29,7 +52,7 @@
 if (station.isMine()) {
    // buy all the coal the train can carry
    let coal = station.getAvailableCoal(); 
-   this.tradeWithStation(station, coal);
+   this.getCoalFromStation(station, coal);
 
    // after trading wait one second before leaving
    this.waitAtStation(1000); 
@@ -37,7 +60,7 @@ if (station.isMine()) {
 if (station.isFactory()) {
    // sell half the coal the train is carrying
    let coal = this.getAvailableFuel() / 2; 
-   this.tradeWithStation(station, coal);
+   this.giveCoalToStation(station, coal);
 
    // after trading wait half second before leaving
    this.waitAtStation(500); 
@@ -56,15 +79,13 @@ if (station.isFactory()) {
 // station.getCoalMiningRate() // coal generated every 5 seconds
 //
 // -- Locomotive (this) -- 
-// this.tradeWithStation(station: Station, coal: int)  
+// this.getCoalFromStation(station: Station, coal: int)  
+// this.giveCoalToStation(station: Station, coal: int)  
 // this.waitAtStation(milliseconds: int)
 // this.getAvailableFuel()
 // this.setMemory(key, value)
 // this.getMemory(key) -> value
 //
-//
-// (alex) TODO: move tradeWithStation to 
-// giveCoalToStation(coal: int), getCoalFromStation(coal: int)
 `;
 	document.getElementById("working-code").innerHTML = starting_code;
 	document.getElementById("saved-code").innerHTML = starting_code;
@@ -73,6 +94,9 @@ if (station.isFactory()) {
 	function updateCode(){
 		var savedCode = document.getElementById("code-input").value;
 		document.getElementById("saved-code").innerHTML = savedCode;
+	  var div = this._game._document.getElementById('player-logs');
+			div.innerHTML += '<p class="playerlog" style="margin-bottom:0px">[computer] code updated</p>';
+	  div.scrollTop = div.scrollHeight;
 	}
 </script>
 
@@ -125,7 +149,9 @@ if (station.isFactory()) {
     this.load.image('locomotive', 'assets/locomotive.png')
     this.load.image('wagon', 'assets/wagon.png')
     this.load.image('mine', 'assets/mine.png')
+    this.load.image('mine2', 'assets/mine2.png')
     this.load.image('factory', 'assets/factory.png')
+    this.load.image('factory2', 'assets/factory2.png')
     this.load.image('water', 'assets/water.png')
   }
 
@@ -157,6 +183,8 @@ if (station.isFactory()) {
   function create() {
 
     // To add a static sprite for GUI, use this.add.image(...).setScrollFactor(0)
+
+    this._document = document
 
     this.cameras.main.setBounds(constants.GRID_MIN_X, constants.GRID_MIN_Y, constants.GRID_MAX_X, constants.GRID_MAX_Y);
     this.cameraController = new CameraController();
@@ -305,6 +333,9 @@ if (station.isFactory()) {
     let y = HEIGHT - TILESIZE;
     for (let action of actions) {
       let image = game.add.image(x, y, action.image);
+	  if (action['image'] == 'locomotive'){
+	  	game._locomotiveBuilder = image;
+	  }
       image.setScrollFactor(0);
       image.setInteractive();
       image.depth = 1000; // Always show in front
