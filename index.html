@@ -13,6 +13,7 @@
 		style="position: absolute;left:0px;bottom:0px;width:60%;color:white;font-family:monospace;height:78px;overflow:overlay;z-index:-1;"></div>
 
 	<div class="row" style="width:100%">
+		<p>version 1.462</p>
 		<div id="game-canvas" class="col-7" ></div>
 		<div id="IDE" class="col" style="color:white;height:800px;background-color:#3667FF;">
 			<br/>
@@ -96,9 +97,13 @@ if (station.isFactory()) {
 	function updateCode(){
 		var savedCode = document.getElementById("code-input").value;
 		document.getElementById("saved-code").innerHTML = savedCode;
-	  var div = this._game._document.getElementById('player-logs');
-			div.innerHTML += '<p class="playerlog" style="margin-bottom:0px">[computer] code updated</p>';
-	  div.scrollTop = div.scrollHeight;
+			try {
+		  var div = this._game._document.getElementById('player-logs');
+				div.innerHTML += '<p class="playerlog" style="margin-bottom:0px">[computer] code updated</p>';
+		  div.scrollTop = div.scrollHeight;
+				} catch (err) {
+						console.log(err)
+					}
 	}
 </script>
 
