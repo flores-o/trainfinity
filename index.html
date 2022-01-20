@@ -7,19 +7,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.js"></script>
   <script src="RailBuilder.js" type="module"></script>
 </head>
-<body style="background-color:#3667FF;">
+<body style="background-color:#1D9736;">
 	<img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
 	<div id="player-logs"
-		style="position: absolute;left:0px;bottom:0px;width:60%;color:white;font-family:monospace;height:78px;overflow:overlay;z-index:-1;"></div>
+		style="position: absolute;left:0px;bottom:0px;width:60%;color:#154e17;font-family:monospace;overflow:overlay;z-index:-1;height:200px;"></div>
 
 	<div class="row" style="width:100%">
-		<p>version 1.462</p>
-		<div id="game-canvas" class="col-7" ></div>
-		<div id="IDE" class="col" style="color:white;height:800px;background-color:#3667FF;">
+		<div id="game-canvas" class="col-8" style="width:1020px !important;height:783px;"></div>
+		<p style="position:absolute;top:0px;left:0px;">version 1.462</p>
+		<div id="IDE" class="col" style="color:white;height:800px;background-color:#1D9736;">
 			<br/>
 			<textarea id="code-input" 
 
-style="border: solid 1px white;width: 520px;position: absolute;top: 80px;right: 102px;z-index: 2;height: 400px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
+style="border: solid 1px white;width: 520px;position: absolute;top: 160px;right: 80px;z-index: 2;height: 400px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
 				
 				></textarea>
 			<div id ="saved-code" style="display:none"></div>
@@ -37,7 +37,7 @@ style="border: solid 1px white;width: 520px;position: absolute;top: 80px;right: 
     font-family: monospace;
     padding: 5px;
     position: absolute;
-    top: 430px;
+    top: 510px;
     right: 122px;
     z-index: 3;
 
@@ -120,7 +120,6 @@ if (station.isFactory()) {
   import * as constants from "./world/constants.js"
 
   let WIDTH = 1100;
-;debugger
   let HEIGHT = constants.HEIGHT;
   let TILESIZE = 32;
 

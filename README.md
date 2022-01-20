@@ -23,6 +23,7 @@ GAME STORY:
 - you are generating 100$/minute so the bank give you a loan of 10000$. You can now build a...
 
 GAME FEATURES:
+- [ ] autosave: game save every 1 minute
 - [ ] build better creation toolbox (1 image for each buildable train, capacity: vagons)
 - [ ] make train stop if it go one direction
 - [x] **delete railway**

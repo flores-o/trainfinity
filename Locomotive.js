@@ -30,8 +30,8 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	this.stoppedTime = 0;
 
 	// @SolbiatiAlessandro
-	this.fuel = 10;
 	this.fuel_capacity = 100 * capacity;
+	this.fuel = 50;
 	this.hasText = false;
 	if (typeof locomotiveText != 'undefined') {
 		this.hasText = true;
@@ -222,6 +222,9 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		document.getElementById("working-code").innerHTML = newSavedCode;
 	  } catch(err) {
 		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n" + err.message + "\n\n"+err.stack);
+		  // TODO: bug the game might throw error on player written code 
+		  // cause it  is context based (e.g bug only in mine code and the train passing by factory
+		  // not breaking and getting saved as working code)
 		  eval(
 			document.getElementById("working-code").innerHTML
 		  );

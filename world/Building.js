@@ -30,7 +30,7 @@ class Building extends Phaser.GameObjects.Sprite {
 			  this.coalTradePrice = Math.random() * 3 + 1;
 			  this.coalGenerationFactor = Math.random() * 3 + 1;
 			  this.inventory = {coal: 0}
-		      this._scene.player.log("> new mine ("+this.name+ ", level "+ this.level+ ") created, extracts "+this.coalGenerationFactor.toFixed(2)+" coal every 5 seconds")
+		      this._scene.player.log("> new mine ("+this.name+ ", level "+ this.level+ ") created, extracts "+((this.level + 1) * this.coalGenerationFactor).toFixed(2)+" coal every 5 seconds")
 			  break;
 		case this.isFactory():
 			  this.coalGenerationFactor = 0;
@@ -127,14 +127,13 @@ class Building extends Phaser.GameObjects.Sprite {
 			  var reward = this._scene.player.levelUp();
 			  this._scene.player.moneyText.visible = constants.money_enabled;
 			  this._scene.player.moneyPMText.visible = true;
-
+			  this._scene._creator._createMines(1, 0);
 			  var success_text = "Wow! You moved 100 unites of coal to the factory. The factory has been using this coal to drill a new coal mine that is now ready for you to use! ";
 			  if (constants.money_enabled){
 				  success_text += " Your earned the factory's and you can now sell them carbon at $"+this.coalTradePrice.toFixed(2)+"/unit!\n";
 
 			  }
 			  alert(success_text + "\n\nNow, can you build a better railway that brings 100 coal/minute to the factories?");
-			  this._scene._creator._createMines(1, 0);
 			  return;
 		  }
 
@@ -142,16 +141,15 @@ class Building extends Phaser.GameObjects.Sprite {
 		  // (coal for next level exponentially higher)
 		  if (this.isFactory() &&
 			  this.inventory.coal >= this.factory_coalForLevel(this.level)){
-			  if (Math.random() > 0.5){
+			  if (Math.random() >= 0.5){
 				  this._scene._creator._createMines(1, this.level);
 				  this.level += 1;
-			  this.setTexture('factory2')
+				  this.setTexture('factory2')
 				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+" factory! It generated a level "+ (this.level - 1) + " mine")
 			  } else {
 				  this.level += 1;
-				  this._scene.availableTrains.push(this.level);
-				  this._scene.player.canBuildTrain = true
-				  this._scene._locomotiveBuilder.visible = true
+				  this.setTexture('factory2')
+				  this._scene.player.trainBuilder.newTrain(this.level)
 				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+"factory! It generated a train with capacity " + (this.level  * 100))
 			  }
 		  }

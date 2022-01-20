@@ -11,59 +11,68 @@ import {ActionController} from "./ActionController.js"
 import {Locomotive} from "./Locomotive.js"
 import {Wagon} from "./Wagon.js"
 
-class TrainBuilder extends ActionController {
-  constructor(grid, physicsGroup, scene) {
-    super(grid, physicsGroup, scene);
+class TrainBuilder {
+  constructor(grid, physicsGroup, scene, level) {
+    this.grid = grid
+	this.physicsGroup  = physicsGroup
+	this.scene = scene
+	this.level = level
+	this.gameObjects = []
+	this.trainCreated = false;
+	this.trainBuilderText = new Phaser.GameObjects.Text(
+		this.scene, 
+		0,0,
+		"lvl "+this.level);
+	this.trainBuilderText.depth = 1004
+	this.trainBuilderText.visible = false
+	this.scene.add.existing(this.trainBuilderText)
+
   }
 
-  _positionsToMarkInvalid() {
-    return this.positions.filter((x) => !this.grid.hasRail(x));
+  newTrain(level){
+	  this.scene._locomotiveBuilder.visible = true
+	  this.trainBuilderText.setPosition(this.scene._locomotiveBuilder.x + 20,  
+	  this.scene._locomotiveBuilder.y)
+	  this.trainBuilderText.visible = true
+	  this.trainBuilderText.setText("lvl "+level)
+	  this.trainCreated = false;
+	  this.level = level
   }
 
-	
-  pointerUp(){
-	  this._scene.player.canBuildTrain = false
-	  this._scene._locomotiveBuilder.visible = false
-	  // TODO: bug, you can still create as many train as you want until you don't change to railway
-	  return super.pointerUp();
+  pointerDown(position){
+	  for(const [key, value] of Object.entries(this.scene.grid._buildings)){
+		  if(value.name == "RailSegment" && !this.trainCreated){
+			var trainCapacity = this.level + 1
+			let locomotivePosition = {x: value.x, y: value.y}
+			let wagonPositions = Array(this.level + 1).fill(locomotivePosition)
+			let locomotiveText = new Phaser.GameObjects.Text(this.scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");
+			  locomotiveText.depth=1001;
+			let direction = Array.from(value.directions)[0]
+			let leader = new Locomotive(this.scene, this.grid, locomotivePosition.x, locomotivePosition.y, direction, locomotiveText, this.scene.player, trainCapacity);
+			this.scene.locomotiveGroup.add(leader, true)
+			this.scene.locomotiveGroup.add(locomotiveText, true)
+			for (let position of wagonPositions) {
+			  let wagon = new Wagon(this.scene, position.x, position.y, leader);
+			  this.scene.locomotiveGroup.add(wagon, true)
+			  leader = wagon
+			}
+
+			this.trainCreated = true;
+		    this.scene._locomotiveBuilder.visible = false;
+		    this.trainBuilderText.visible = false;
+		  }
+	  }
   }
 
-	/*
-  pointerDown(){
-	  this._scene.player.canBuildTrain = false
-	  this._scene._locomotiveBuilder.visible = false
-	  return super.pointerUp();
+  pointerUp(){}
 
-  }*/
-
-  _createGameObjects() {
-	var trainCapacity;
-    trainCapacity = 1
-    let locomotivePosition = this.positions[0];
-    let wagonPositions = this.positions.slice(1);
-	let locomotiveText = new Phaser.GameObjects.Text(this._scene, locomotivePosition.x, locomotivePosition.y, "Locomotive Created");
-	  locomotiveText.depth=1001;
-    let leader = new Locomotive(this._scene, this.grid, locomotivePosition.x, locomotivePosition.y, this._direction(), locomotiveText, this._scene.player, trainCapacity);
-    this.gameObjects = [leader, locomotiveText];
-    for (let position of wagonPositions) {
-      let wagon = new Wagon(this._scene, position.x, position.y, leader);
-      this.gameObjects.push(wagon);
-      leader = wagon
-	}
+  pointerMove(position){
+	  return []
   }
 
-  _writeToGrid(position, building) {
+  tokill_createGameObjects() {
   }
 
-  _direction() {
-    let firstPosition = this.positions[0];
-    let lastPosition = this.positions[this.positions.length - 1];
-    if (firstPosition.x == lastPosition.x) {
-      return firstPosition.y < lastPosition.y ? 'N' : 'S';
-    } else {
-      return firstPosition.x < lastPosition.x ? 'W' : 'E';
-    }
-  }
 }
 
 export {TrainBuilder};

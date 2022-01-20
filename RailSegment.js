@@ -35,6 +35,9 @@ class RailSegment extends Phaser.GameObjects.Sprite {
     this._newDirections = {N: 'N', E: 'E', S: 'S', W: 'W'};
     this._connectedAdjacentPositionDeltas = [];
     this._updateGraphics()
+	  this.name = 'RailSegment'
+	  this.x = x 
+	  this.y = y
   }
 
   canBuildOn(building) {

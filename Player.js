@@ -1,4 +1,5 @@
 import * as constants from "./world/constants.js"
+import  {TrainBuilder}  from "./TrainBuilder.js";
 /**
  * @solbiatialessandro
  */
@@ -12,23 +13,35 @@ class Player {
 	  this.moneyText.visible = false;
 	  this.moneyPMText.visible = false;
 	  this.goalText = goalText;
+	  this.goalText.setPadding(16)
+	  this.goalText.setBackgroundColor("#1D4336")
 	  this._game = _game;
+	  this.trainBuilder = new TrainBuilder(
+			this._game.grid, 
+			this._game.locomotiveGroup,
+			this._game,
+			0),
       this.actions = [{
         'image': 'rail',
         'controller': this._game.railBuilder,
 		'quantity': -1,
 		'level': 0,
-      }, {
-        'image': 'locomotive',
-        'controller': this._game.trainBuilder,
-		'quantity': 1,
-		'level': 0,
-      }, {
+      },
+
+		  {
         'image': 'bomb',
         'controller': this._game.deleter,
 		'quantity': -1,
 		'level': 0,
-      }];
+      },
+		  {
+        'image': 'locomotive',
+		'controller': this.trainBuilder,
+		'quantity': 1,
+		'level': 0,
+      }
+
+	  ];
 
 
 
@@ -47,11 +60,12 @@ class Player {
 
   createActionSelection() {
     let x = constants.TILESIZE;
-    let y = constants.HEIGHT - constants.TILESIZE;
+    let y = constants.HEIGHT - (2 * constants.TILESIZE);
     for (let action of this.actions) {
       let image = this._game.add.image(x, y, action.image);
 	  if (action['image'] == 'locomotive'){
 	  	this._game._locomotiveBuilder = image;
+		  this.trainBuilder.newTrain(0)
 	  }
       image.setScrollFactor(0);
       image.setInteractive();
