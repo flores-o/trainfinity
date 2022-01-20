@@ -23,8 +23,15 @@ GAME STORY:
 - you are generating 100$/minute so the bank give you a loan of 10000$. You can now build a...
 
 GAME FEATURES:
+- [ ] highest score (leaderboard)
 - [ ] autosave: game save every 1 minute
-- [ ] build better creation toolbox (1 image for each buildable train, capacity: vagons)
+Saving looks like a feature that would really improve game duration. What do we need to serialise?
+- player (level)
+- grid, what is on every block. For every building (coal, level)
+- locomotives + wagons
+- code on the computer
+
+- [- ] build better creation toolbox (1 image for each buildable train, capacity: vagons)
 - [ ] make train stop if it go one direction
 - [x] **delete railway**
 - [ ] **fix unreadble text when two text boxes collide**
