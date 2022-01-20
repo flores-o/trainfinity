@@ -5,7 +5,7 @@
 
 (listen to this music while you play the game 
 
-https://soundcloud.com/user-595434544/trainfinity-music2?si=9389588c8fde42529a471a3d2019d7ae&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing)
+https://soundcloud.com/user-595434544/trainfinity-music2)
 
 ![](https://github.com/SolbiatiAlessandro/trainfinity/blob/master/demo.png?raw=true)
 ![](https://github.com/SolbiatiAlessandro/trainfinity/blob/master/Screenshot%202022-01-19%20at%2003.52.02.png?raw=true)
