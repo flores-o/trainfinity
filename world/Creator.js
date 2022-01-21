@@ -34,7 +34,7 @@ class Creator {
     this._createMines(constants.MINES);
 
 	this._game.player.log(">[TUTORIAL][1/4] drag and drop railway (bottom left) onto the green part of the map")
-	  this._game.player.log(">[TUTORIAL][2/4] drag and drop train (bottom left) onto the railway")
+	  this._game.player.log(">[TUTORIAL][2/4] double click on the train icon to get a train going  ")
 	  this._game.player.log(">[TUTORIAL][3/4] make sure the train doesn't run out of fuel by stopping at coal mines")
 	  this._game.player.log(">[TUTORIAL][4/4] bring 100 coal to the factories to become a Railway Engineer 1")
   }
