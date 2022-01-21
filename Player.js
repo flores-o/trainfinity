@@ -8,6 +8,7 @@ class Player {
 	  this.money = 300;
 	  this.coal = 0;
 	  this.coal_earned = [];
+	  this.ownedTrains = 0;
 	  this.moneyText = moneyText;
 	  this.moneyPMText = moneyPMText;
 	  this.moneyText.setText("$" + this.money.toFixed(1));
@@ -86,6 +87,10 @@ class Player {
 	  this.level += 1;
 	  this.cpm_target += 100;
 	  this.goalText.setText("⭐ Bring "+this.cpm_target+" units of coal/minute to the factories ⭐");
+	  this.saveLeaderboardScore()
+  }
+
+  saveLeaderboardScore(){
 	  this._game.leaderboard.addScore(this.name, this.level, this.coal.toFixed(0))
   }
 

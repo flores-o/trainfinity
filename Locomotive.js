@@ -69,6 +69,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		this.lost == true;
 		this.owner.log(">["+this.name+"] run out of fuel")
 		this.owner.log("YOU LOST THE GAME!")
+		//this.owner.saveLeaderboardScore():
 		throw "YOU LOST THE GAME!"
 		//location.reload();
 	}
