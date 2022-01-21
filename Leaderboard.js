@@ -27,8 +27,8 @@ class LeaderboardPlayer {
 		return otherPlayer.score - this.score 
 	}
 
-	getLeaderboardString(){
-		return  "<p>"+ this.name + " (Railway Engineer "+ this.level +"): " + this.score  + "</p>";
+	getLeaderboardString(nth){
+		return  "<tr><td>#"+nth+"</td><td>"+ this.name + "</td><td>Railway Engineer "+ this.level +" </td><td> " + this.score  + " coal</td></tr>";
 
 	}
 }
@@ -52,7 +52,7 @@ class Leaderboard {
 
 
 		var _leaderboardString = "";
-		items.forEach(key_player => { _leaderboardString += key_player[1].getLeaderboardString()
+		items.forEach((key_player, index) => { _leaderboardString += key_player[1].getLeaderboardString(index + 1)
 		})
 
 		

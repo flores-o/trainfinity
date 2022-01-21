@@ -8,6 +8,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="RailBuilder.js" type="module"></script>
 </head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+</style>
 <body style="background-color:#1D9736;">
 	<img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
 	<div id="player-logs"
@@ -17,9 +30,8 @@
 		<div id="game-canvas" class="col-8" style="width:1020px !important;height:783px;"></div>
 		<p style="position:absolute;top:0px;left:0px;">version 1.462</p>
 		<div id="IDE" class="col" style="color:white;height:800px;background-color:#1D9736;">
-			<div>
-				<h2>LEADERBOARD</h2>
-				<p id="leaderboard-content"></p>
+			<div style="height:200px;overflow-y:scroll;">
+				<table id="leaderboard-content"></table>
 			</div>
 			<br/>
 			<textarea id="code-input" 
@@ -150,7 +162,6 @@ if (station.isFactory()) {
   var game = new Phaser.Game(config);
   window.game = game;
 
-  game.leaderboard = new Leaderboard();
 
   function initialize() {
   }
@@ -221,6 +232,7 @@ if (station.isFactory()) {
 
     this._creator = new Creator(this);
     this._creator.create();
+	  this.leaderboard = new Leaderboard();
 
     this.input.on('pointerdown', function (pointer) {
       if (pointer.buttons == 1) {

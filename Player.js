@@ -6,15 +6,18 @@ import  {TrainBuilder}  from "./TrainBuilder.js";
 class Player {
   constructor(moneyText, moneyPMText, goalText, _game) {
 	  this.money = 300;
+	  this.coal = 0;
 	  this.coal_earned = [];
 	  this.moneyText = moneyText;
 	  this.moneyPMText = moneyPMText;
 	  this.moneyText.setText("$" + this.money.toFixed(1));
 	  this.moneyText.visible = false;
-	  this.moneyPMText.visible = false;
+	  this.moneyPMText.visible = true;
+	  this.moneyPMText.setPadding(16);
+	  this.moneyPMText.setBackgroundColor("#1D4336")
 	  this.goalText = goalText;
-	  this.goalText.setPadding(16)
-	  this.goalText.setBackgroundColor("#1D4336")
+	  this.goalText.setPadding(16);
+	  this.goalText.setBackgroundColor("#0E5D93");
 	  this._game = _game;
 	  this.trainBuilder = new TrainBuilder(
 			this._game.grid, 
@@ -56,6 +59,7 @@ class Player {
   // initial routine to create all player related interfaces
   create(){
     this.createActionSelection();
+	this.name = prompt("How should we call you? (for the leaderboard)");
   }
 
   createActionSelection() {
@@ -81,7 +85,8 @@ class Player {
   levelUp(){
 	  this.level += 1;
 	  this.cpm_target += 100;
-	  this.goalText.setText("⭐ Railway Engineer "+(this.level+1)+": Bring "+this.cpm_target+" units of coal/minute to the factories ⭐");
+	  this.goalText.setText("⭐ Bring "+this.cpm_target+" units of coal/minute to the factories ⭐");
+	  this._game.leaderboard.addScore(this.name, this.level, this.coal.toFixed(0))
   }
 
   levelCompleted(cpm){
@@ -91,6 +96,7 @@ class Player {
   }
 
   earn_coal(coal){
+	  this.coal += coal
 	  if (this.level > 0){
 		  this.coal_earned.push({coal: coal, time: Date.now()});
 	  }
@@ -110,7 +116,12 @@ class Player {
 
   update(){
 	  var cpm = this.coal_per_minute().toFixed(1) ;
-	  this.moneyPMText.setText("" + cpm + " coal/minute");
+	  var statusText = "Railway Engineer " +(this.level)+ " | "+this.coal.toFixed(0)+" coal";
+	  if (this.level > 0){
+		statusText += " | " + cpm + " coal/minute";
+	  }
+	  this.moneyPMText.setText(statusText);
+	  this.goalText.x = this.moneyPMText.width;
 	  if (this.level > 0 && cpm > this.cpm_target){
 		  this.levelCompleted(cpm);
 	  }
