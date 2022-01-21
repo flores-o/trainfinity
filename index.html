@@ -36,7 +36,7 @@ td, th {
 			<br/>
 			<textarea id="code-input" 
 
-style="border: solid 1px white;width: 520px;position: absolute;top: 160px;right: 80px;z-index: 2;height: 400px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
+style="border: solid 1px white;width: 520px;position: absolute;top: 200;right: 120;z-index: 2;height: 400px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
 				
 				></textarea>
 			<div id ="saved-code" style="display:none"></div>
@@ -180,6 +180,8 @@ if (station.isFactory()) {
     this.load.image('factory', 'assets/factory.png')
     this.load.image('factory2', 'assets/factory2.png')
     this.load.image('water', 'assets/water.png')
+
+	this.load.audio('music', 'assets/music.mp3')
   }
 
   class Position {
@@ -213,6 +215,7 @@ if (station.isFactory()) {
 
     this._document = document
 
+
     this.cameras.main.setBounds(constants.GRID_MIN_X, constants.GRID_MIN_Y, constants.GRID_MAX_X, constants.GRID_MAX_Y);
     this.cameraController = new CameraController();
     this.grid = new Grid(TILESIZE);
@@ -221,6 +224,8 @@ if (station.isFactory()) {
     this.railBuilder = new RailBuilder(this.grid, this.buildingGroup, this);
     this.deleter = new Deleter(this.grid, this.buildingGroup, this);
     this.trainBuilder = new TrainBuilder(this.grid, this.locomotiveGroup, this);
+
+	game.sound.play('music')
 
 
     this.physics.add.overlap(this.buildingGroup, this.buildingGroup, buildingOnBuilding, null, this);
