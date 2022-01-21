@@ -3,6 +3,36 @@ var PUT_URL = "https://www.meeiot.org/put/";
 var APIKEY = "6f13e698ef69cdaf87f00aba23924f88645c3039167fa574fe983e";
 var KEY = "trainfinity-leaderboard";
 
+class LeaderboardPlayer {
+	constructor(key, value){
+		this.name = key;
+		this.level = value[0];
+		this.score = value[1];
+	}
+
+	_currentRanking(leaderboard){
+		return leaderboard[this.name]
+	}
+
+	addRanking(leaderboard){
+		if (typeof this._currentRanking(leaderboard) === 'undefined'){
+			leaderboard[this.name] = [this.level, this.score]
+		} else {
+			var prev = leaderboard[this.name]
+			leaderboard[this.name] = [Math.max(this.level, prev[0]), Math.max(this.score, prev[1])]
+		}
+	}
+
+	leaderboardSort(otherPlayer){
+		return otherPlayer.score - this.score 
+	}
+
+	getLeaderboardString(){
+		return  "<p>"+ this.name + " (Railway Engineer "+ this.level +"): " + this.score  + "</p>";
+
+	}
+}
+
 class Leaderboard {
 	constructor(){
 		this.leaderboard = {}
@@ -13,18 +43,16 @@ class Leaderboard {
 	setLeaderboardHTML(leaderboard){
 		// can't believe i needed this https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
 		var items = Object.keys(leaderboard).map(function(key) {
-		  return [key, leaderboard[key]];
+		  return [key, new LeaderboardPlayer(key, leaderboard[key])];
 		});
 		// Sort the array based on the second element
 		items.sort(function(first, second) {
-		  return second[1] - first[1];
+		  return first[1].leaderboardSort(second[1])
 		});
 
-		;debugger
 
 		var _leaderboardString = "";
-		items.forEach(m => {
-			_leaderboardString += "<p>"+ m[0] + ": " + m[1] + "</p>";
+		items.forEach(key_player => { _leaderboardString += key_player[1].getLeaderboardString()
 		})
 
 		
@@ -53,11 +81,13 @@ class Leaderboard {
 		});
 	}
 
-	addScore(player, score){
-		var prev = typeof this.leaderboard[player] === 'undefined' ? -1 : this.leaderboard[player]
-		this.leaderboard[player] = Math.max(score, prev)
+	addScore(name, level, score){
+		// level (Railway Engineer 2)
+		// score (2125 coal brought to factories)
+		var player = new LeaderboardPlayer(name, [level, score])
+		player.addRanking(this.leaderboard)
 		this.saveScore()
-		this.setLeaderboardHTML(this.leaderboard	)
+		this.setLeaderboardHTML(this.leaderboard)
 	}
 
 	saveScore(){
