@@ -1,9 +1,7 @@
 /**
  * Created by Filip on 2018-05-20.
  */
-
-
-
+import * as constants from "./world/constants.js"
 const downwardsOrLeftwards = Symbol('downwardsOrLeftwards');
 
 let OPPOSITES = {'N': 'S', 'S': 'N', 'E': 'W', 'W': 'E'};
@@ -13,6 +11,14 @@ let CONNECTED_POSITIONS = {
   'W': {x: -1, y: 0},
   'E': {x: 1, y: 0}
 };
+
+class Road extends Phaser.GameObjects.Sprite{
+	constructor(scene, x, y, direction){
+		super(scene, x, y, 'road')
+		this.direction = direction
+		//this.scene.buildingGroup.add(this, true)
+	}
+}
 
 class RailSegment extends Phaser.GameObjects.Sprite {
   /**
@@ -38,6 +44,19 @@ class RailSegment extends Phaser.GameObjects.Sprite {
 	  this.name = 'RailSegment'
 	  this.x = x 
 	  this.y = y
+
+	if(this.scene.grid.isBuildingAdjacent({x: this.x, y: this.y})){
+		  let adjacentBuildings = this.scene.grid.adjacentBuildings(
+			  {x: this.x, y: this.y});
+		  adjacentBuildings.forEach(function(building){
+			  if (building.isMine() || building.isFactory()){
+				var distance = Phaser.Math.Distance.Between(building.x, building.y, this.x, this.y) ;
+				if (distance <= constants.TILESIZE){
+					this.setTexture('road')
+				}
+			  }
+		  }.bind(this))
+	}
   }
 
   canBuildOn(building) {
@@ -170,8 +189,11 @@ class RailSegmentFactory {
 
     let railSegments = [];
     for (let i = 0; i < positions.length; i++) {
-      railSegments.push(new RailSegment(this._scene, positions[i].x, positions[i].y, directionArray[i]))
+	  var rail = new RailSegment(this._scene, positions[i].x, positions[i].y, directionArray[i]);
+      railSegments.push(rail)
     }
+
+	
 
     return railSegments;
   }
