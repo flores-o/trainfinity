@@ -37,7 +37,7 @@ class Leaderboard {
 	constructor(){
 		this.leaderboard = {}
 		this._leaderboard = "";
-		this.getLeaderboard()
+		this.getLeaderboard(() => {})
 	}
 
 	setLeaderboardHTML(leaderboard){
@@ -59,7 +59,7 @@ class Leaderboard {
 		document.getElementById('leaderboard-content').innerHTML = _leaderboardString
 	}
 
-	getLeaderboard(){
+	getLeaderboard(callback){
 		$.ajax({
 			url: GET_URL + APIKEY + "/" + KEY,
 			type: 'GET',
@@ -70,6 +70,7 @@ class Leaderboard {
 				this._leaderboard = decodeURIComponent(res.responseText);
 				this.leaderboard = JSON.parse(this._leaderboard)
 				this.setLeaderboardHTML(this.leaderboard)
+				callback();
 			}.bind(this),
 			error: function(err){
 				console.log(err);
@@ -77,6 +78,7 @@ class Leaderboard {
 				this._leaderboard = decodeURIComponent(err.responseText);
 				this.leaderboard = JSON.parse(this._leaderboard)
 				this.setLeaderboardHTML(this.leaderboard)
+				callback();
 			}.bind(this)
 		});
 	}
@@ -84,10 +86,12 @@ class Leaderboard {
 	addScore(name, level, score){
 		// level (Railway Engineer 2)
 		// score (2125 coal brought to factories)
-		var player = new LeaderboardPlayer(name, [level, score])
-		player.addRanking(this.leaderboard)
-		this.saveScore()
-		this.setLeaderboardHTML(this.leaderboard)
+		this.getLeaderboard(function(){
+			var player = new LeaderboardPlayer(name, [level, score])
+			player.addRanking(this.leaderboard)
+			this.saveScore()
+			this.setLeaderboardHTML(this.leaderboard)
+		}.bind(this))
 	}
 
 	saveScore(){

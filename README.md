@@ -1,4 +1,3 @@
-
 # ProgrammableTrains
 
 [Play the game now at https://solbiatialessandro.github.io/trainfinity/](https://solbiatialessandro.github.io/trainfinity/)
@@ -61,6 +60,15 @@ BUGS:
 - [half fixed] mines work only if approached from left and bottom
 - if coal goes down from one mine goes down also from other mines?
 
+
+UX:
+G
+- he didn't read the tutorial
+- doesn't understand how to put down railway
+- put train and get stack cause railway is in ugly place
+- doesn't understand how to get railway to take coal from mine, try to get railway on top of mine
+- confused with intersections
+
 -----
 
 Forked from (https://github.com/Godsmith/trainfinity)
@@ -72,3 +80,6 @@ Strategy game about trains, written in JavaScript.
 Online at https://trainfinity.netlify.com .
 
 Requires Chrome.
+
+
+

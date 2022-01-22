@@ -147,9 +147,9 @@ class Building extends Phaser.GameObjects.Sprite {
 				  this.setTexture('factory2')
 				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+" factory! It generated a level "+ (this.level - 1) + " mine")
 			  } else {
+				  this._scene.player.trainBuilder.newTrain(this.level)
 				  this.level += 1;
 				  this.setTexture('factory2')
-				  this._scene.player.trainBuilder.newTrain(this.level)
 				  this._scene.player.log(">["+this.name+"] is now a level "+this.level+"factory! It generated a train with capacity " + (this.level  * 100))
 			  }
 		  }

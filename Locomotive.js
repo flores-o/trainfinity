@@ -211,6 +211,10 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  return this.fuel;
   }
 
+  getFuelCapacity(){
+	  return this.fuel_capacity;
+  }
+
   stopAt(station){
 	  this.stoppedTime = 1000;
 	  // THIS IS THE GAME EDITABLE CODE
