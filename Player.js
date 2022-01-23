@@ -134,7 +134,13 @@ class Player {
 
   log(text){
 	  var div = this._game._document.getElementById('player-logs');
+          if (text.includes('TUTORIAL')){
+
+	  div.innerHTML += '<p class="playerlog tutorial" style="margin-bottom:0px">' + text + '</p>';
+		} else {
 	  div.innerHTML += '<p class="playerlog" style="margin-bottom:0px">' + text + '</p>';
+	}
+
 	  div.scrollTop = div.scrollHeight;
   }
 }

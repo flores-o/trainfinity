@@ -22,48 +22,57 @@ td, th {
 }
 .computerTab{
   border: solid 1px white;
-  width: 520px;
-  position: absolute;
-  top:190px;
-  right: 120px;
+width: 100%;
+height:420px;
   z-index: 2;
-  height: 410px;
   background-color: black;
   color: lawngreen;
   font: revert;
   padding: 10px;
 }
+
+.tutorial{
+background-color:#d6ffdf;
+color:black;
+padding:10px;
+margin-top:5px;
+}
+
+.nav-item{
+  background-color: black;
+  border: 2px rgb(126, 126, 126);
+  border-style: solid;
+}
 </style>
 
 <body style="background-color:#1D9736;">
 
-  <img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
+  <img id="computer-image" src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
 
   <div class="row" style="width:100%">
      <div id="game-canvas" class="col-8" style="width:1020px !important;height:783px;"></div>
      <p style="position:absolute;top:0px;left:0px;">version 1.475</p>
      <div id="IDE" class="col" style="color:white;height:800px;background-color:#1D9736;">
+<div id="tabs-wrapper" style="position:absolute;top:200px;right:100px;width:530px">
+      <ul id="tabs-button" class="nav nav-tabs" style="width:100%;">
+        <li class="nav-item" id="nav-item-tutorial" onclick="showTutorial()">
+          <a class="nav-link" href="#" style="color:white">Logs</a>
+        </li>
+        <li class="nav-item" id="nav-item-code" onclick="showCode()">
+          <a class="nav-link" href="#" style="color: white;">Code</a>
+        </li>
+        <li class="nav-item" id="nav-item-leaderboard" onclick="showLeaderboard()">
+          <a class="nav-link" href="#" style="color: white;">Leaderboard</a>
+        </li>
+      </ul>
+      <div id="tabs-content">
+        <div id="player-logs" class="computerTab" style="display:block; overflow-y:scroll"></div>
+        <textarea id="code-input" class="computerTab" style="display:none;overflow-y:scroll;"></textarea>
+        <table id="leaderboard-content" style="display:none;" class="computerTab"></table>
+      </div>
+      </div>
 
-        <ul class="nav nav-tabs">
-          <li class="nav-item" id="nav-item-tutorial" onclick="showTutorial()">
-            <a class="nav-link active" aria-current="page" href="#">Tutorial</a>
 
-            <div id="player-logs" class="computerTab" style="display:block; overflow-y:scroll">
-         </div>
-          </li>
-          <li class="nav-item" id="nav-item-code" onclick="showCode()">
-            <a class="nav-link" href="#">Code</a>
-            <textarea id="code-input" class="computerTab" style="display:none">
-        </textarea>
-          </li>
-          <li class="nav-item" id="nav-item-leaderboard" onclick="showLeaderboard()">
-            <a class="nav-link" href="#">Leaderboard</a>
-
-            <div style="height:200px;overflow-y:scroll;">
-              <table id="leaderboard-content" style="display:none;" class="computerTab"></table>
-           </div>
-          </li>
-        </ul>
 
 
         <br/>
@@ -93,6 +102,12 @@ td, th {
   </div>
 
 <script>
+
+// some UI stuff
+this.document.getElementById("tabs-wrapper").style['top'] = (this.document.getElementById("computer-image").y + 20) + 'px' ;
+this.document.getElementById("tabs-wrapper").style['left'] =(this.document.getElementById("computer-image").x + 40) + 'px' ;
+
+
 	var starting_code = `// this Javascript code runs all the time a train enters a a station
 
 if (station.isMine()) {

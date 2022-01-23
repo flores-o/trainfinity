@@ -20,23 +20,17 @@ class Creator {
   create() {
 
 	this._createPlayer();
-	this._game.player.log(">")
-	this._game.player.log(">")
-	this._game.player.log(">")
-	this._game.player.log(">")
-	this._game.player.log(">")
-	this._game.player.log(">")
-	this._game.player.log(">")
 
     this._createGrass();
     this._createWater()
     this._createFactories(constants.FACTORIES);
     this._createMines(constants.MINES);
 
-	this._game.player.log(">[TUTORIAL][1/4] drag and drop railway (bottom left) onto the green part of the map")
-	  this._game.player.log(">[TUTORIAL][2/4] double click on the train icon to get a train going  ")
-	  this._game.player.log(">[TUTORIAL][3/4] make sure the train doesn't run out of fuel by stopping at coal mines")
+	this._game.player.log(">[TUTORIAL][1/4] click on the railway (bottom left), drag and drop it anywhere on the map")
+	  this._game.player.log(">[TUTORIAL][2/4] make your railway pass next to a coal mine")
+	  this._game.player.log(">[TUTORIAL][3/4] double click on the train ")
 	  this._game.player.log(">[TUTORIAL][4/4] bring 100 coal to the factories to become a Railway Engineer 1")
+	  this._game.player.log(">[TUTORIAL][5/4] bonus: re-program the train in the code tab")
   }
 
   _createPlayer(){
