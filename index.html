@@ -20,75 +20,118 @@ td, th {
   text-align: left;
   padding: 8px;
 }
+.computerTab{
+  border: solid 1px white;
+width: 100%;
+height:420px;
+  z-index: 2;
+  background-color: black;
+  color: lawngreen;
+  font: revert;
+  padding: 10px;
+}
+
+.tutorial{
+background-color:#d6ffdf;
+color:black;
+padding:10px;
+margin-top:5px;
+}
+
+.nav-item{
+  background-color: black;
+  border: 2px rgb(126, 126, 126);
+  border-style: solid;
+}
 </style>
+
 <body style="background-color:#1D9736;">
-	<img src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
-	<div id="player-logs"
-		style="position: absolute;left:0px;bottom:0px;width:60%;color:#154e17;font-family:monospace;overflow:overlay;z-index:-1;height:200px;"></div>
 
-	<div class="row" style="width:100%">
-		<div id="game-canvas" class="col-8" style="width:1020px !important;height:783px;"></div>
-		<p style="position:absolute;top:0px;left:0px;">version 1.475</p>
-		<div id="IDE" class="col" style="color:white;height:800px;background-color:#1D9736;">
-			<div style="height:200px;overflow-y:scroll;">
-				<table id="leaderboard-content"></table>
-			</div>
-			<br/>
-			<textarea id="code-input" 
+  <img id="computer-image" src="./assets/computer.png" style="position:absolute;bottom:0px;right:0px;width:38%"/>
 
-style="border: solid 1px white;width: 520px;position: absolute;top:190px;right: 120px;z-index: 2;height: 410px;background-color: black;color: lawngreen;font: revert;padding: 10px;"
-				
-				></textarea>
-			<div id ="saved-code" style="display:none"></div>
-			<div id ="working-code"style="display:none"></div>
-			
-			<button  onclick="updateCode()"
-				style="
+  <div class="row" style="width:100%">
+     <div id="game-canvas" class="col-8" style="width:1020px !important;height:783px;"></div>
+     <p style="position:absolute;top:0px;left:0px;">version 1.475</p>
+     <div id="IDE" class="col" style="color:white;height:800px;background-color:#1D9736;">
+<div id="tabs-wrapper" style="position:absolute;top:200px;right:100px;width:530px">
+      <ul id="tabs-button" class="nav nav-tabs" style="width:100%;">
+        <li class="nav-item" id="nav-item-tutorial" onclick="showTutorial()">
+          <a class="nav-link" href="#" style="color:white">Logs</a>
+        </li>
+        <li class="nav-item" id="nav-item-code" onclick="showCode()">
+          <a class="nav-link" href="#" style="color: white;">Code</a>
+        </li>
+        <li class="nav-item" id="nav-item-leaderboard" onclick="showLeaderboard()">
+          <a class="nav-link" href="#" style="color: white;">Leaderboard</a>
+        </li>
+      </ul>
+      <div id="tabs-content">
+        <div id="player-logs" class="computerTab" style="display:block; overflow-y:scroll"></div>
+        <textarea id="code-input" class="computerTab" style="display:none;overflow-y:scroll;"></textarea>
+        <table id="leaderboard-content" style="display:none;" class="computerTab"></table>
+      </div>
+      </div>
 
 
-    box-shadow: 2px 2px 9px black;
-    border-radius: 5px;
-    background-color: red;
-    color: white;
-    font-weight: bolder;
-    font-family: monospace;
-    padding: 5px;
-    position: absolute;
-    top: 510px;
-    right: 122px;
-    z-index: 3;
 
-					   "
-					   >Update Code</button>
-			</div>
-		</div>
-	</div>
+
+        <br/>
+
+
+
+        <div id ="saved-code" style="display:none"></div>
+        <div id ="working-code"style="display:none"></div>
+        <button  id="update-code-button" onclick="updateCode()"
+           style="
+           display: none;
+           box-shadow: 2px 2px 9px black;
+           border-radius: 5px;
+           background-color: red;
+           color: white;
+           font-weight: bolder;
+           font-family: monospace;
+           padding: 5px;
+           position: absolute;
+           top: 510px;
+           right: 122px;
+           z-index: 3;
+           "
+           >Update Code</button>
+     </div>
+  </div>
+  </div>
 
 <script>
+
+// some UI stuff
+this.document.getElementById("tabs-wrapper").style['top'] = (this.document.getElementById("computer-image").y + 20) + 'px' ;
+this.document.getElementById("tabs-wrapper").style['left'] =(this.document.getElementById("computer-image").x + 40) + 'px' ;
+
+
 	var starting_code = `// this Javascript code runs all the time a train enters a a station
 
 if (station.isMine()) {
    // buy all the coal the train can carry
-   let coal = station.getAvailableCoal(); 
+   let coal = station.getAvailableCoal();
    this.getCoalFromStation(station, coal);
 
    // after trading wait one second before leaving
-   this.waitAtStation(1000); 
+   this.waitAtStation(1000);
 }
 if (station.isFactory()) {
    // sell half the coal the train is carrying
-   let coal = this.getAvailableFuel() / 2; 
+   let coal = this.getAvailableFuel() / 2;
    this.giveCoalToStation(station, coal);
 
    // after trading wait half second before leaving
-   this.waitAtStation(500); 
+   this.waitAtStation(500);
    this.print("test")
 }
 
-// 
+//
 // DOCS
 //
-// -- Station -- 
+// -- Station --
 // station.isMine()
 // station.isFactory()
 // station.getName()
@@ -97,9 +140,9 @@ if (station.isFactory()) {
 // station.getMemory(key) -> value
 // station.getCoalMiningRate() // coal generated every 5 seconds
 //
-// -- Locomotive (this) -- 
-// this.getCoalFromStation(station: Station, coal: int)  
-// this.giveCoalToStation(station: Station, coal: int)  
+// -- Locomotive (this) --
+// this.getCoalFromStation(station: Station, coal: int)
+// this.giveCoalToStation(station: Station, coal: int)
 // this.waitAtStation(milliseconds: int)
 // this.getAvailableFuel()
 // this.getFuelCapacity()
@@ -123,6 +166,30 @@ if (station.isFactory()) {
 						console.log(err)
 					}
 	}
+  function showTutorial()
+  {
+    document.getElementById("player-logs").style.display = "block";
+    document.getElementById("code-input").style.display = "none";
+    document.getElementById("update-code-button").style.display = "none";
+    document.getElementById("leaderboard-content").style.display = "none";
+  }
+
+  function showCode()
+  {
+    document.getElementById("player-logs").style.display = "none";
+    document.getElementById("code-input").style.display = "block";
+    document.getElementById("update-code-button").style.display = "block";
+    document.getElementById("leaderboard-content").style.display = "none";
+  }
+
+  function showLeaderboard()
+  {
+    document.getElementById("player-logs").style.display = "none";
+    document.getElementById("code-input").style.display = "none";
+    document.getElementById("update-code-button").style.display = "none";
+    document.getElementById("leaderboard-content").style.display = "block";
+  }
+
 </script>
 
 <script type="module">
