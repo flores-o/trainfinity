@@ -1,6 +1,9 @@
 # ProgrammableTrains
 
-[Play the game now at https://solbiatialessandro.github.io/trainfinity/](https://solbiatialessandro.github.io/trainfinity/)
+- **Play the game now at  [https://solbiatialessandro.github.io/trainfinity/](https://solbiatialessandro.github.io/trainfinity/)**
+- Watch a demo at [https://www.youtube.com/watch?v=AeTpLTWt4NQ](https://www.youtube.com/watch?v=AeTpLTWt4NQ)
+
+![](https://i.ytimg.com/an_webp/AeTpLTWt4NQ/mqdefault_6s.webp?du=3000&sqp=CNj_xo8G&rs=AOn4CLAOVWRX6pJAHciCFDBbEXsORcV4Qw)
 
 ![](https://github.com/SolbiatiAlessandro/trainfinity/blob/master/render.png?raw=true)
 ![](https://github.com/SolbiatiAlessandro/trainfinity/blob/master/demo.png?raw=true)
