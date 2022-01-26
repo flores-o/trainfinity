@@ -1,5 +1,6 @@
 import * as constants from "./world/constants.js"
 import  {TrainBuilder}  from "./TrainBuilder.js";
+
 /**
  * @solbiatialessandro
  */
@@ -68,6 +69,8 @@ class Player {
     let y = constants.HEIGHT - (2 * constants.TILESIZE);
     for (let action of this.actions) {
       let image = this._game.add.image(x, y, action.image);
+      let frame = this._game.add.image(x, y, 'frame_png');
+      frame.depth = 1100;
 	  if (action['image'] == 'locomotive'){
 	  	this._game._locomotiveBuilder = image;
 		  this.trainBuilder.newTrain(0)
