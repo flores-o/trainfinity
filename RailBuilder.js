@@ -4,6 +4,7 @@
 import {RailSegmentFactory} from "./RailSegment.js";
 import {Image} from "./Image.js";
 import {ActionController} from "./ActionController.js"
+import {Building} from "./world/Building.js"
 
 class RailBuilder extends ActionController{
   constructor(grid, physicsGroup, scene) {
@@ -26,7 +27,9 @@ class RailBuilder extends ActionController{
 	  let existingBuilding = this.grid.get(position);
 	  // TODO: Why is there no error raised when trying to build on another type of building?
 	  if (this.gameObjects[i].canBuildOn(existingBuilding)) {
-		this.gameObjects[i] = this.gameObjects[i].combine(existingBuilding);
+		if (!(existingBuilding instanceof Building)){ // if a factory/mine don't combine it
+		  this.gameObjects[i] = this.gameObjects[i].combine(existingBuilding);
+		}
 	  } else {
 		this.invalidPositions.push(position);
 	  }

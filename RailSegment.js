@@ -2,6 +2,7 @@
  * Created by Filip on 2018-05-20.
  */
 import * as constants from "./world/constants.js"
+import {Building} from "./world/Building.js"
 const downwardsOrLeftwards = Symbol('downwardsOrLeftwards');
 
 let OPPOSITES = {'N': 'S', 'S': 'N', 'E': 'W', 'W': 'E'};
@@ -45,18 +46,6 @@ class RailSegment extends Phaser.GameObjects.Sprite {
 	  this.x = x 
 	  this.y = y
 
-	if(this.scene.grid.isBuildingAdjacent({x: this.x, y: this.y})){
-		  let adjacentBuildings = this.scene.grid.adjacentBuildings(
-			  {x: this.x, y: this.y});
-		  adjacentBuildings.forEach(function(building){
-			  if (building.isMine() || building.isFactory()){
-				var distance = Phaser.Math.Distance.Between(building.x, building.y, this.x, this.y) ;
-				if (distance <= constants.TILESIZE){
-					this.setTexture('road')
-				}
-			  }
-		  }.bind(this))
-	}
   }
 
   canBuildOn(building) {
@@ -65,7 +54,7 @@ class RailSegment extends Phaser.GameObjects.Sprite {
     if (!building) {
       return true
     }
-    return building instanceof RailSegment;
+    return building instanceof RailSegment || building instanceof Building;
   }
 
   /**
