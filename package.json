@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "main": "RailBuilder.js",
   "dependencies": {
-    "jest": "^23.6.0"
+    "jest": "^23.6.0",
+    "phaser3-rex-plugins": "^1.1.66"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
