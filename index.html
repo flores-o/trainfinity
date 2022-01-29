@@ -400,14 +400,15 @@ if (station.isFactory()) {
   .on('destroy', function () {
       //print.text += 'parent destroy\n'
   })
-  ;debugger
   var model = this.plugins.get('rexmodalplugin').add(button, {
+        cover: false,
         manualClose: true,
         duration: {
             in: 1000,
             out: 1000
         },
     })
+  button.depth = 1000;
   // Manual close Modal
   button
       .setInteractive()
