@@ -105,7 +105,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  }
 
 	  // does the rail  has a mine
-	  let railSegment = this.grid.get({x: Math.floor(vector.x), y: Math.floor(vector.y)})
+	  let railSegment = this.grid.get({x: Math.floor(vector.x) , y: Math.floor(vector.y) })
 	  if(typeof railSegment != 'undefined' && railSegment.building){
 		  //TODO: ugly bug here, based on the speed is going to stop
 		  // or not stop at a station. I.E. slow is going to stop 5 times, 
