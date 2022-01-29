@@ -251,7 +251,9 @@ if (station.isFactory()) {
     this.load.image('water', 'assets/water.png')
     this.load.image('frame_png', 'assets/frame.png');
     this.load.image('instructions_railway', 'assets/instructions_railway.png');
-	this.load.audio('music', 'assets/music.mp3')
+    this.load.image('instructions_bomb', 'assets/instructions_bomb.png');
+    this.load.image('arrow_down', 'assets/arrow_down.png');
+	  this.load.audio('music', 'assets/music.mp3')
 
     this.load.plugin('rexmodalplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexmodalplugin.min.js', true);
   }
@@ -414,6 +416,8 @@ if (station.isFactory()) {
       .setInteractive()
       .on('pointerup', function () {
           model.requestClose()
+          arrow_railway_onboarding.destroy()
+          _showOnboardingStep2()
       })
 
       /*
@@ -425,8 +429,60 @@ if (station.isFactory()) {
             print.text += 'model.close\n';
         })
       */
-
   // modal code ends
+
+  // adding here arrow code
+    let x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
+    let y = constants.HEIGHT - (3.5 * constants.TILESIZE);
+
+    let arrow_railway_onboarding = this.add.image(x, y, 'arrow_down');
+    arrow_railway_onboarding.depth = 1100;
+  // ending onboarding arrow
+
+
+  // modal 2 logic
+  function _showOnboardingStep2()
+  {
+    var button = this.add.image(550, 150, 'instructions_bomb')
+  .on('destroy', function () {
+      //print.text += 'parent destroy\n'
+  })
+  var model = this.plugins.get('rexmodalplugin').add(button, {
+        cover: false,
+        manualClose: true,
+        duration: {
+            in: 1000,
+            out: 1000
+        },
+    })
+  button.depth = 1000;
+  // Manual close Modal
+  button
+      .setInteractive()
+      .on('pointerup', function () {
+          model.requestClose()
+          arrow_railway_onboarding.destroy()
+      })
+
+      /*
+  model
+        .on('open', function () {
+            print.text += 'model.open\n';
+        })
+        .on('close', function () {
+            print.text += 'model.close\n';
+        })
+      */
+  // modal code ends
+
+  // adding here arrow code
+    let x = Math.floor(constants.WIDTH / 2)  - (2 * constants.TILESIZE);
+    let y = constants.HEIGHT - (3.5 * constants.TILESIZE);
+
+    let arrow_railway_onboarding = this.add.image(x, y, 'arrow_down');
+    arrow__railway_onboarding.depth = 1100;
+  // ending onboarding arrow
+  }
 }
 
 
