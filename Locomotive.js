@@ -48,77 +48,82 @@ class Locomotive extends Phaser.GameObjects.Sprite {
   }
 
   preUpdate(time, delta) {
-    super.preUpdate(time, delta);
 
-    //   console.log('Train entering ' + approachDirection + ' side of building at (' +
-    //     this.currentBuilding.x + ',' + this.currentBuilding.y + '). Turn ' + turn);
+	try{
+	  super.preUpdate(time, delta);
 
-    // Calculate pathProgress
-    var speedPerMs = 0.05;
-	if (this.stoppedTime > 0){
-		speedPerMs = 0;
-		this.stoppedTime -= delta;
-		return;
+	  //   console.log('Train entering ' + approachDirection + ' side of building at (' +
+	  //     this.currentBuilding.x + ',' + this.currentBuilding.y + '). Turn ' + turn);
+
+	  // Calculate pathProgress
+	  var speedPerMs = 0.05;
+	  if (this.stoppedTime > 0){
+		  speedPerMs = 0;
+		  this.stoppedTime -= delta;
+		  return;
+	  }
+	  let length = this.path.getLength();
+	  let pixelsSinceLast = speedPerMs * delta;
+	  let pathProgressDelta = pixelsSinceLast / length;
+	  this.pathProgress += pathProgressDelta;
+
+	  if (this.fuel <= 0 && this.lost == false){
+		  this.lost == true;
+		  this.owner.log(">["+this.name+"] run out of fuel")
+		  this.owner.log("YOU LOST THE GAME!")
+		  //this.owner.saveLeaderboardScore():
+		  throw "YOU LOST THE GAME!"
+		  //location.reload();
+	  }
+
+
+	  if (this.pathProgress < 1 && this.fuel > 0) {
+
+		this.fuel -= pathProgressDelta;
+		if(this.hasText){
+			if (this.fuel > 0){
+				this.locomotiveText.setText( Math.floor(this.fuel) + "/"+ this.fuel_capacity);
+			} else {
+				this.locomotiveText.setText("OUT OF FUEL!");
+			}
+			if (this.fuel < 10){
+				this.locomotiveText.setStyle({ fontSize: '30px', backgroundColor: 'red' })
+
+			} else {
+				this.locomotiveText.setStyle({ fontSize: '14px'})
+
+			}
+
+		}
+
+
+		let vector = this.path.getPoint(this.pathProgress);
+		this.previousX = this.x;
+		this.previousY = this.y;
+		this.setPosition(vector.x, vector.y);
+		//console.log(vector.x, vector.y);
+		if (this.hasText){
+			this.locomotiveText.setPosition(vector.x, vector.y);
+		}
+
+		// does the rail  has a mine
+		let railSegment = this.grid.get({x: Math.floor(vector.x) , y: Math.floor(vector.y) })
+		if(typeof railSegment != 'undefined' && railSegment.building){
+			//TODO: ugly bug here, based on the speed is going to stop
+			// or not stop at a station. I.E. slow is going to stop 5 times, 
+			// fast is not going to stop. Looks like with 0.05 speed
+			// on alex computer is going to stop always once at all stations
+		  //
+		  railSegment.building.trainPassing(this)
+		}
+		this._calculateDirection();
+		this._setAngle();
+	  } else {
+		this._addPathOfCurrentRail();
+	  }
+	} catch(err) {
+	  console.log(err);
 	}
-    let length = this.path.getLength();
-    let pixelsSinceLast = speedPerMs * delta;
-    let pathProgressDelta = pixelsSinceLast / length;
-    this.pathProgress += pathProgressDelta;
-
-	if (this.fuel <= 0 && this.lost == false){
-		this.lost == true;
-		this.owner.log(">["+this.name+"] run out of fuel")
-		this.owner.log("YOU LOST THE GAME!")
-		//this.owner.saveLeaderboardScore():
-		throw "YOU LOST THE GAME!"
-		//location.reload();
-	}
-
-
-    if (this.pathProgress < 1 && this.fuel > 0) {
-
-	  this.fuel -= pathProgressDelta;
-	  if(this.hasText){
-		  if (this.fuel > 0){
-			  this.locomotiveText.setText( Math.floor(this.fuel) + "/"+ this.fuel_capacity);
-		  } else {
-			  this.locomotiveText.setText("OUT OF FUEL!");
-		  }
-		  if (this.fuel < 10){
-			  this.locomotiveText.setStyle({ fontSize: '30px', backgroundColor: 'red' })
-
-		  } else {
-			  this.locomotiveText.setStyle({ fontSize: '14px'})
-
-		  }
-
-	  }
-
-
-      let vector = this.path.getPoint(this.pathProgress);
-      this.previousX = this.x;
-      this.previousY = this.y;
-      this.setPosition(vector.x, vector.y);
-	  //console.log(vector.x, vector.y);
-	  if (this.hasText){
-		  this.locomotiveText.setPosition(vector.x, vector.y);
-	  }
-
-	  // does the rail  has a mine
-	  let railSegment = this.grid.get({x: Math.floor(vector.x) , y: Math.floor(vector.y) })
-	  if(typeof railSegment != 'undefined' && railSegment.building){
-		  //TODO: ugly bug here, based on the speed is going to stop
-		  // or not stop at a station. I.E. slow is going to stop 5 times, 
-		  // fast is not going to stop. Looks like with 0.05 speed
-		  // on alex computer is going to stop always once at all stations
-		//
-		railSegment.building.trainPassing(this)
-	  }
-      this._calculateDirection();
-      this._setAngle();
-    } else {
-      this._addPathOfCurrentRail();
-    }
   }
 
   _setAngle() {

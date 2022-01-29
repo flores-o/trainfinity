@@ -11,6 +11,7 @@ import * as constants from "./world/constants.js"
 class Grid {
   constructor() {
     this._buildings = {};
+	this.trees = [];
   }
 
   /**
@@ -39,6 +40,12 @@ class Grid {
   adjacentBuildings(position) {
     return this.adjacent(position).filter(this.hasBuilding.bind(this))
 		  .map(this.get.bind(this));
+  }
+
+  adjacentTrees(position){
+    return this.adjacent(position).filter(this.hasTree.bind(this))
+		  .map(this.get.bind(this));
+
   }
 
   isBuildingAdjacent(position) {
@@ -91,6 +98,10 @@ class Grid {
 
   hasBuilding(position) {
     return this.get(position) instanceof Building;
+  }
+
+  hasTree(position) {
+    return this.get(position) instanceof Water;
   }
 
   hasRail(position) {

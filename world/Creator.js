@@ -22,9 +22,9 @@ class Creator {
 	this._createPlayer();
 
     this._createGrass();
+    this._createWater()
     this._createFactories(constants.FACTORIES);
     this._createMines(constants.MINES);
-    this._createWater()
 
 	this._game.player.log(">[TUTORIAL][1/4] click on the railway (bottom left), drag and drop it anywhere on the map")
 	  this._game.player.log(">[TUTORIAL][2/4] make your railway pass next to a coal mine")
@@ -103,10 +103,14 @@ class Creator {
       for (let y = roundToNearestTile(constants.GRID_MIN_Y); y < constants.GRID_MAX_Y; y += this._tileSize) {
         let probability = baseWaterProbability +
           increasedProbabilityPerNeighbor * this._game.grid.countAdjacentWater({x: x, y: y});
-        if (Phaser.Math.RND.frac() < probability && !this._game.grid.isBuildingAdjacent({x: x, y: y}) && !this._game.grid.isOnBuilding({x: x, y: y}) ) {
+        if (Phaser.Math.RND.frac() < probability 
+		  //&& !this._game.grid.isBuildingAdjacent({x: x, y: y}) 
+		  //&& !this._game.grid.isOnBuilding({x: x, y: y}) 
+		) {
           let building = new Water(this._game, x, y);
           this._game.add.existing(building);
           this._game.grid.set({x, y}, building)
+		  this._game.grid.trees.push(building);
         }
       }
     }

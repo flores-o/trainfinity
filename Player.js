@@ -1,4 +1,5 @@
 import * as constants from "./world/constants.js"
+
 import  {TrainBuilder}  from "./TrainBuilder.js";
 
 /**
@@ -22,6 +23,7 @@ class Player {
 	  this.goalText.setPadding(16);
 	  this.goalText.setBackgroundColor("#0E5D93");
 	  this._game = _game;
+	this.treeFallingCount = 0;
 	  this.trainBuilder = new TrainBuilder(
 			this._game.grid, 
 			this._game.locomotiveGroup,
@@ -66,7 +68,7 @@ class Player {
   }
 
   createActionSelection() {
-    let x = constants.TILESIZE;
+    let x = Math.floor(constants.WIDTH / 2)  - (3 * constants.TILESIZE);
     let y = constants.HEIGHT - (2 * constants.TILESIZE);
     for (let action of this.actions) {
       let image = this._game.add.image(x, y, action.image);
@@ -78,11 +80,11 @@ class Player {
 	  }
       image.setScrollFactor(0);
       image.setInteractive();
-      image.depth = 1000; // Always show in front
+      image.depth = 1110; // Always show in front
       image.on('pointerdown', () => {
         this._game.selectedActionController = action.controller;
       });
-      x += constants.TILESIZE;
+      x += 2 * constants.TILESIZE;
     }
   }
 
@@ -123,7 +125,7 @@ class Player {
 		  .reduce((a, b) => a + b, 0)
   }
 
-  update(){
+  update(){ //  called around 50 times per second
 	  var cpm = this.coal_per_minute().toFixed(1) ;
 	  var statusText = "Railway Engineer " +(this.level)+ " | "+this.coal.toFixed(0)+" coal";
 	  if (this.level > 0){
@@ -134,6 +136,17 @@ class Player {
 	  if (this.level > 0 && cpm > this.cpm_target){
 		  this.levelCompleted(cpm);
 	  }
+
+	this.treeFallingCount += 1;
+	if (this.treeFallingCount == 500){ // every 10 seconds
+	  this.treeFallingCount = 0;
+	  if (Math.random() < 0.15){
+		var l = this._game.grid.trees.length;
+		var killTree = this._game.grid.trees[Math.floor(Math.random() * l)];
+		killTree.kill();
+	  }
+	}
+
   }
 
   log(text){

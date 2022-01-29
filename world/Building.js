@@ -27,6 +27,9 @@ class Building extends Phaser.GameObjects.Sprite {
 	this.hasText = false;
 	this.timer = 0;
 	this.playerMemory = {}
+
+	var trees = this._scene.grid.adjacentTrees({x: x, y: y});
+	trees.forEach(tree => { tree.kill(); })
 	switch(true){
 		case this.isMine():
 			  this.coalTradePrice = Math.random() * 3 + 1;
