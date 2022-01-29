@@ -10,6 +10,7 @@ class Player {
 	  this.coal = 0;
 	  this.coal_earned = [];
 	  this.ownedTrains = 0;
+	this.ownedBuildings  = [];
 	  this.moneyText = moneyText;
 	  this.moneyPMText = moneyPMText;
 	  this.moneyText.setText("$" + this.money.toFixed(1));

@@ -45,6 +45,10 @@ class Grid {
     return this.adjacent(position).some(this.hasBuilding.bind(this));
   }
 
+  isOnBuilding(position){
+	return this.hasBuilding({x: Math.floor(position.x), y: Math.floor(position.y)})
+  }
+
   isRailAdjacent(position) {
     return this.adjacent(position).some(this.hasRail.bind(this));
   }

@@ -21,6 +21,8 @@ class Building extends Phaser.GameObjects.Sprite {
 	}
 	
 	this._scene = scene;
+	this.depth = 3;
+	this._scene.player.ownedBuildings.push(this)
 	this.setName(name + Math.floor(Math.random()*10000));
 	this.hasText = false;
 	this.timer = 0;

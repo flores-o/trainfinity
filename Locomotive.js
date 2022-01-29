@@ -26,7 +26,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
     this.previousY = y;
     this.direction = direction;
     this._setAngle();
-    this.depth = 1;
+    this.depth = 2;
 	this.stoppedTime = 0;
 
 	// @SolbiatiAlessandro
@@ -103,15 +103,16 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  if (this.hasText){
 		  this.locomotiveText.setPosition(vector.x, vector.y);
 	  }
-	  if (this.grid.isBuildingAdjacent(vector)) {
+
+	  // does the rail  has a mine
+	  let railSegment = this.grid.get({x: Math.floor(vector.x), y: Math.floor(vector.y)})
+	  if(typeof railSegment != 'undefined' && railSegment.building){
 		  //TODO: ugly bug here, based on the speed is going to stop
 		  // or not stop at a station. I.E. slow is going to stop 5 times, 
 		  // fast is not going to stop. Looks like with 0.05 speed
 		  // on alex computer is going to stop always once at all stations
-		  let adjacentBuildings = this.grid.adjacentBuildings(
-			  {x: Math.floor(vector.x), y: Math.floor(vector.y)});
-			  //vector );
-		  adjacentBuildings.forEach(building => building.trainPassing(this))
+		//
+		railSegment.building.trainPassing(this)
 	  }
       this._calculateDirection();
       this._setAngle();

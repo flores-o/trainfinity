@@ -42,9 +42,17 @@ class RailSegment extends Phaser.GameObjects.Sprite {
     this._newDirections = {N: 'N', E: 'E', S: 'S', W: 'W'};
     this._connectedAdjacentPositionDeltas = [];
     this._updateGraphics()
-	  this.name = 'RailSegment'
-	  this.x = x 
-	  this.y = y
+	this.name = 'RailSegment'
+	this.x = x 
+	this.y = y
+
+	this.building = null;
+	for(var b of this.scene.player.ownedBuildings){
+	  if(b.getBounds().contains(x, y)){
+		this.building = b;
+		//this.setTexture('railwayEntrance');
+	  }
+	}
 
   }
 
