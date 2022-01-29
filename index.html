@@ -251,6 +251,7 @@ if (station.isFactory()) {
     this.load.image('factory2', 'assets/factory2.png')
     this.load.image('water', 'assets/water.png')
     this.load.image('frame_png', 'assets/frame.png');
+    this.load.image('instructions_railway_png', 'assets/instructions_railway.jpg')
 	  this.load.audio('music', 'assets/music.mp3')
 
     this.load.plugin('rexmodalplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexmodalplugin.min.js', true);
@@ -390,10 +391,17 @@ if (station.isFactory()) {
   // adding a modal with instructions for onboarding
   // var print = this.add.text(0, 0, 'Click rectangle\n').setDepth(1);
 
-  var button = this.add.rectangle(400, 300, 100, 100, 0xffffff)
+  /*
+  var button = this.add.rectangle(500, 300, 200, 200, 0xffffff)
       .on('destroy', function () {
           //print.text += 'parent destroy\n'
       })
+  */
+  var button = this.add.image(500, 300, 'instructions_railway_png')
+  .on('destroy', function () {
+      //print.text += 'parent destroy\n'
+  })
+  ;debugger
   var model = this.plugins.get('rexmodalplugin').add(button, {
         manualClose: true,
         duration: {
