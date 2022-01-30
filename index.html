@@ -253,6 +253,7 @@ if (station.isFactory()) {
     this.load.image('instructions_railway', 'assets/instructions_railway.png');
     this.load.image('instructions_bomb', 'assets/instructions_bomb.png');
     this.load.image('instructions_train', 'assets/instructions_train.png');
+    this.load.image('instructions_first_goal', 'assets/instructions_first_goal.png');
     this.load.image('arrow_down', 'assets/arrow_down.png');
 	  this.load.audio('music', 'assets/music.mp3')
 
@@ -394,8 +395,9 @@ if (station.isFactory()) {
 
 
   // adding a modal with instructions for onboarding
-  let onboarding_images = ['instructions_railway', 'instructions_bomb', 'instructions_train']
+  let onboarding_images = ['instructions_railway', 'instructions_bomb', 'instructions_train', 'instructions_first_goal']
   _showOnboarding(this, onboarding_images)
+
   function _showOnboarding(game, onboarding_images)
   {
       // adding here arrow code
@@ -403,6 +405,7 @@ if (station.isFactory()) {
       let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
       _showOnboardingHelper(game, onboarding_images, 0, arrow_x, arrow_y)
   }
+
   function _showOnboardingHelper (game, onboarding_images, onboarding_step=null, arrow_x, arrow_y)
   {
     let onboarding_steps =  onboarding_images.length
@@ -427,8 +430,8 @@ if (station.isFactory()) {
         .on('pointerup', function () {
             model.requestClose()
             arrow_railway_onboarding.destroy()
+            game.player.tutorial.step1 = false;
             _showOnboardingHelper(game, onboarding_images, onboarding_step+1, arrow_x + 2 * constants.TILESIZE, arrow_y)
-			      game.player.tutorial.step1 = false;
         })
 
     // modal code ends
