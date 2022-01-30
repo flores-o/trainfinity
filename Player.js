@@ -11,8 +11,9 @@ class Tutorial{
 		this.player = player;
 		this.step1 = false;
 		this.arrowStep = 0;
+		;debugger
 	}
-
+    // TODO moves only on first step
 	update(){
 		if(this.step1){
 			let range = 40;
@@ -55,7 +56,7 @@ class Player {
 	  this._game = _game;
 	this.treeFallingCount = 0;
 	  this.trainBuilder = new TrainBuilder(
-			this._game.grid, 
+			this._game.grid,
 			this._game.locomotiveGroup,
 			this._game,
 			0),

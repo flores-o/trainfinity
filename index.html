@@ -395,7 +395,14 @@ if (station.isFactory()) {
 
 
   // adding a modal with instructions for onboarding
+  // TODO move this in tutorial class [oana]
   let onboarding_images = ['instructions_railway', 'instructions_bomb', 'instructions_train', 'instructions_first_goal']
+  let arrow_coordinates = [
+    [Math.floor(constants.WIDTH / 2) - (3.5 * constants.TILESIZE), constants.HEIGHT - (1.5 * constants.TILESIZE)],
+    [Math.floor(constants.WIDTH / 2) - (1.5 * constants.TILESIZE), constants.HEIGHT - (1.5 * constants.TILESIZE)],
+    [Math.floor(constants.WIDTH / 2) - (-1.5 * constants.TILESIZE), constants.HEIGHT - (1.5 * constants.TILESIZE)],
+    [null, null]
+]
   _showOnboarding(this, onboarding_images)
 
   function _showOnboarding(game, onboarding_images)
@@ -403,16 +410,15 @@ if (station.isFactory()) {
       // adding here arrow code
       let arrow_x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
       let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
-      _showOnboardingHelper(game, onboarding_images, 0, arrow_x, arrow_y)
+      _showOnboardingHelper(game, onboarding_images, 0, true, arrow_x, arrow_y)
   }
 
-  function _showOnboardingHelper (game, onboarding_images, onboarding_step=null, arrow_x, arrow_y)
+  function _showOnboardingHelper (game, onboarding_images, onboarding_step=null, use_arrow=false, arrow_x=null, arrow_y=null)
   {
     let onboarding_steps =  onboarding_images.length
     if (onboarding_step >= onboarding_steps){
       return
     }
-	  game.player.tutorial.step1 = true;
     var button = game.add.image(550, 150, onboarding_images[onboarding_step])
 
     var model = game.plugins.get('rexmodalplugin').add(button, {
@@ -425,21 +431,30 @@ if (station.isFactory()) {
       })
     button.depth = 1000;
     // Manual close Modal
+
     button
         .setInteractive()
         .on('pointerup', function () {
             model.requestClose()
-            arrow_railway_onboarding.destroy()
-            game.player.tutorial.step1 = false;
-            _showOnboardingHelper(game, onboarding_images, onboarding_step+1, arrow_x + 2 * constants.TILESIZE, arrow_y)
+            _showOnboardingHelper(game, onboarding_images, onboarding_step+1, true, arrow_x + 2 * constants.TILESIZE, arrow_y)
         })
-
     // modal code ends
+      if (arrow_coordinates[onboarding_step][0]==null && arrow_coordinates[onboarding_step][1] == null){
+        return
+      }
 
       let arrow_railway_onboarding = game.add.image(arrow_x, arrow_y, 'arrow_down');
-	    game.player.tutorial.arrow = arrow_railway_onboarding;
-	    game.player.tutorial.step1 = true;
+      game.player.tutorial.arrow = arrow_railway_onboarding;
+      game.player.tutorial.step1 = true;
       arrow_railway_onboarding.depth = 1100;
+
+      button
+      .setInteractive()
+      .on('pointerup', function () {
+          arrow_railway_onboarding.destroy()
+          game.player.tutorial.step1 = false;
+        })
+
     // ending onboarding arrow
   }
 }
