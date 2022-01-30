@@ -252,6 +252,7 @@ if (station.isFactory()) {
     this.load.image('frame_png', 'assets/frame.png');
     this.load.image('instructions_railway', 'assets/instructions_railway.png');
     this.load.image('instructions_bomb', 'assets/instructions_bomb.png');
+    this.load.image('instructions_train', 'assets/instructions_train.png');
     this.load.image('arrow_down', 'assets/arrow_down.png');
 	  this.load.audio('music', 'assets/music.mp3')
 
@@ -389,29 +390,34 @@ if (station.isFactory()) {
     */
 
 	alert("You are a train engineer. You have been charged of building a railway to bring 100 units of coals to the factory. Watch out your trains don't run out of coal!");
-  // adding a modal with instructions for onboarding
-  // var print = this.add.text(0, 0, 'Click rectangle\n').setDepth(1);
 
-  /*
-  var button = this.add.rectangle(500, 300, 200, 200, 0xffffff)
-      .on('destroy', function () {
-          //print.text += 'parent destroy\n'
-      })
-  */
-  _showOnboardingStep1(this)
-  function _showOnboardingStep1 (game)
+
+
+  // adding a modal with instructions for onboarding
+  let onboarding_images = ['instructions_railway', 'instructions_bomb', 'instructions_train']
+  _showOnboarding(this, onboarding_images)
+  function _showOnboarding(game, onboarding_images)
   {
-	game.player.tutorial.step1 = true;
-    var button = game.add.image(550, 150, 'instructions_railway')
-    .on('destroy', function () {
-        //print.text += 'parent destroy\n'
-    })
+      // adding here arrow code
+      let arrow_x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
+      let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
+      _showOnboardingHelper(game, onboarding_images, 0, arrow_x, arrow_y)
+  }
+  function _showOnboardingHelper (game, onboarding_images, onboarding_step=null, arrow_x, arrow_y)
+  {
+    let onboarding_steps =  onboarding_images.length
+    if (onboarding_step >= onboarding_steps){
+      return
+    }
+	  game.player.tutorial.step1 = true;
+    var button = game.add.image(550, 150, onboarding_images[onboarding_step])
+
     var model = game.plugins.get('rexmodalplugin').add(button, {
           cover: false,
           manualClose: true,
           duration: {
               in: 1000,
-              out: 1000
+              out: 200
           },
       })
     button.depth = 1000;
@@ -421,77 +427,21 @@ if (station.isFactory()) {
         .on('pointerup', function () {
             model.requestClose()
             arrow_railway_onboarding.destroy()
-            _showOnboardingStep2()
-			game.player.tutorial.step1 = false;
+            _showOnboardingHelper(game, onboarding_images, onboarding_step+1, arrow_x + 2 * constants.TILESIZE, arrow_y)
+			      game.player.tutorial.step1 = false;
         })
 
-        /*
-    model
-          .on('open', function () {
-              print.text += 'model.open\n';
-          })
-          .on('close', function () {
-              print.text += 'model.close\n';
-          })
-        */
     // modal code ends
 
-    // adding here arrow code
-      let x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
-      let y = constants.HEIGHT - (3.5 * constants.TILESIZE);
-
-      let arrow_railway_onboarding = game.add.image(x, y, 'arrow_down');
-	  game.player.tutorial.arrow = arrow_railway_onboarding;
-	  game.player.tutorial.step1 = true;
+      let arrow_railway_onboarding = game.add.image(arrow_x, arrow_y, 'arrow_down');
+	    game.player.tutorial.arrow = arrow_railway_onboarding;
+	    game.player.tutorial.step1 = true;
       arrow_railway_onboarding.depth = 1100;
     // ending onboarding arrow
   }
-
-  // modal 2 logic
-  function _showOnboardingStep2()
-  {
-    var button = this.add.image(550, 150, 'instructions_bomb')
-  .on('destroy', function () {
-      //print.text += 'parent destroy\n'
-  })
-  var model = this.plugins.get('rexmodalplugin').add(button, {
-        cover: false,
-        manualClose: true,
-        duration: {
-            in: 1000,
-            out: 1000
-        },
-    })
-  button.depth = 1000;
-  // Manual close Modal
-  button
-      .setInteractive()
-      .on('pointerup', function () {
-          model.requestClose()
-          arrow_railway_onboarding.destroy()
-      })
-
-      /*
-  model
-        .on('open', function () {
-            print.text += 'model.open\n';
-        })
-        .on('close', function () {
-            print.text += 'model.close\n';
-        })
-      */
-  // modal code ends
-
-  // adding here arrow code
-    let x = Math.floor(constants.WIDTH / 2)  - (2 * constants.TILESIZE);
-    let y = constants.HEIGHT - (3.5 * constants.TILESIZE);
-
-    let arrow_railway_onboarding = this.add.image(x, y, 'arrow_down');
-    game.player.tutorial.arrow = arrow_railway
-    arrow__railway_onboarding.depth = 1100;
-  // ending onboarding arrow
-  }
 }
+
+
 
 
   function _debugAddRail(game, class_, x, y, directions) {
