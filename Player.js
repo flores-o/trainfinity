@@ -11,7 +11,6 @@ class Tutorial{
 		this.player = player;
 		this.step1 = false;
 		this.arrowStep = 0;
-		;debugger
 	}
     // TODO moves only on first step
 	update(){
