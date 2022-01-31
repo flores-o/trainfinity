@@ -5,6 +5,36 @@ import  {TrainBuilder}  from "./TrainBuilder.js";
 /**
  * @solbiatialessandro
  */
+class Tutorial{
+	constructor(game, player){
+		this.game = game;
+		this.player = player;
+		this.step1 = false;
+		this.arrowStep = 0;
+	}
+    // TODO moves only on first step
+	update(){
+		if(this.step1){
+			let range = 40;
+			if (this.arrowStep < range){
+			    this.arrow.y -= 0.5;
+			}
+			else{
+				this.arrow.y += 0.5;
+			}
+			this.arrowStep += 1;
+			if (this.arrowStep == range * 2){
+				this.arrowStep = 0;
+			}
+		}
+
+	}
+}
+
+
+/**
+ * @solbiatialessandro
+ */
 class Player {
   constructor(moneyText, moneyPMText, goalText, _game) {
 	  this.money = 300;
@@ -25,10 +55,11 @@ class Player {
 	  this._game = _game;
 	this.treeFallingCount = 0;
 	  this.trainBuilder = new TrainBuilder(
-			this._game.grid, 
+			this._game.grid,
 			this._game.locomotiveGroup,
 			this._game,
 			0),
+        this.tutorial = new Tutorial(_game, this);
       this.actions = [{
         'image': 'rail',
         'controller': this._game.railBuilder,
@@ -137,6 +168,7 @@ class Player {
 		  this.levelCompleted(cpm);
 	  }
 
+
 	this.treeFallingCount += 1;
 	if (this.treeFallingCount == 500){ // every 10 seconds
 	  this.treeFallingCount = 0;
@@ -146,6 +178,8 @@ class Player {
 		killTree.kill();
 	  }
 	}
+
+	  this.tutorial.update();
 
   }
 

@@ -26,11 +26,7 @@ class Creator {
     this._createFactories(constants.FACTORIES);
     this._createMines(constants.MINES);
 
-	this._game.player.log(">[TUTORIAL][1/4] click on the railway (bottom left), drag and drop it anywhere on the map")
-	  this._game.player.log(">[TUTORIAL][2/4] make your railway pass next to a coal mine")
-	  this._game.player.log(">[TUTORIAL][3/4] double click on the train ")
-	  this._game.player.log(">[TUTORIAL][4/4] bring 100 coal to the factories to become a Railway Engineer 1")
-	  this._game.player.log(">[TUTORIAL][5/4] bonus: re-program the train in the code tab")
+	  this._game.player.log(">[TUTORIAL] bonus: re-program the train in the code tab")
   }
 
   _createPlayer(){
@@ -89,7 +85,7 @@ class Creator {
 			  gameVictoryCounter += 1;
 		  }
 	  }
-	  
+
 	  buildings.push(this._createBuilding(name, x, y, initial_inventory, level));
     }
 	return buildings;
@@ -103,9 +99,9 @@ class Creator {
       for (let y = roundToNearestTile(constants.GRID_MIN_Y); y < constants.GRID_MAX_Y; y += this._tileSize) {
         let probability = baseWaterProbability +
           increasedProbabilityPerNeighbor * this._game.grid.countAdjacentWater({x: x, y: y});
-        if (Phaser.Math.RND.frac() < probability 
-		  //&& !this._game.grid.isBuildingAdjacent({x: x, y: y}) 
-		  //&& !this._game.grid.isOnBuilding({x: x, y: y}) 
+        if (Phaser.Math.RND.frac() < probability
+		  //&& !this._game.grid.isBuildingAdjacent({x: x, y: y})
+		  //&& !this._game.grid.isOnBuilding({x: x, y: y})
 		) {
           let building = new Water(this._game, x, y);
           this._game.add.existing(building);
