@@ -11,6 +11,24 @@ class RailBuilder extends ActionController{
     super(grid, physicsGroup, scene);
     this.invalidPositions = [];
 	this.road = null
+  this.hasSelectedRailwayBefore = false;
+  this.hasCreatedRailway = false;
+  this.game = scene;
+  }
+
+  onObjectCreatedCallback(rail){
+    // get called all the time  rail is created succesfully
+    // YOUR CODE HERE
+    this.hasCreatedRailway = true;
+    this.game.player.tutorial.modal_onboarding_instructions_build_railway.requestClose();
+
+    return true;
+  }
+
+  pointerDown(position){
+
+    super.pointerDown(position);
+    console.log("click");
   }
 
   _positionsToMarkInvalid() {
@@ -34,8 +52,8 @@ class RailBuilder extends ActionController{
 		this.invalidPositions.push(position);
 	  }
     }
-	
-	
+
+
   }
 
 }
