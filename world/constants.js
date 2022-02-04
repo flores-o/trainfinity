@@ -8,7 +8,7 @@ let GRID_MAX_X = 1000;
 let GRID_MAX_Y = 800;
 let FACTORIES = 1;
 let MINES = 3;
-let HEIGHT = 800;
+let HEIGHT = 910;
 let WIDTH = 1100;
 
 let money_enabled = false;

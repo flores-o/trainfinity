@@ -99,8 +99,12 @@ class Player {
   }
 
   createActionSelection() {
+
+
     let x = Math.floor(constants.WIDTH / 2)  - (3 * constants.TILESIZE);
     let y = constants.HEIGHT - (2 * constants.TILESIZE);
+    let background = this._game.add.image(x + 2 * constants.TILESIZE, y, 'black');
+	background.depth = 1099;
     for (let action of this.actions) {
       let image = this._game.add.image(x, y, action.image);
       let frame = this._game.add.image(x, y, 'frame_png');
