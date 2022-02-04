@@ -4,6 +4,7 @@
 
 import * as constants from "./constants.js"
 import {Water} from "./Water.js"
+import {RailSegment} from "../RailSegment.js"
 import {Player} from "../Player.js"
 import {Building} from "./Building.js"
 
@@ -18,7 +19,6 @@ class Creator {
   }
 
   create() {
-
 	this._createPlayer();
 
     this._createGrass();
@@ -26,7 +26,32 @@ class Creator {
     this._createFactories(constants.FACTORIES);
     this._createMines(constants.MINES);
 
+	this._createDemoRailway();
+
 	  this._game.player.log(">[TUTORIAL] bonus: re-program the train in the code tab")
+  }
+
+  _createDemoRailway(){
+	  for(var ss of this._game.stations.entries()){
+		  var s = ss[1][0]; // wtf
+		  if(s.isMine()){
+			this._debugAddRail(s.x - ( 2 *  constants.TILESIZE), s.y, ['E']);
+			this._debugAddRail(s.x - ( 1 *  constants.TILESIZE), s.y, ['W', 'E']);
+			this._debugAddRail(s.x - ( 0 *  constants.TILESIZE), s.y, ['W', 'E']);
+			this._debugAddRail(s.x - ( (-1) *  constants.TILESIZE), s.y, ['W', 'E']);
+			this._debugAddRail(s.x - ( (-2) *  constants.TILESIZE), s.y, ['W']);
+			  return;
+		  }
+	  }
+
+  }
+
+  _debugAddRail( x, y, directions) {
+    let railSegment = new RailSegment(this._game, x, y, directions);
+    this._game.grid.set({x: x, y: y}, railSegment);
+    this._game.buildingGroup.add(railSegment, true);
+	var trees = this._game.grid.adjacentTrees({x: x, y: y});
+	trees.forEach(tree => { tree.kill(); })
   }
 
   _createPlayer(){

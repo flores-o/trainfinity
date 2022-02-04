@@ -104,8 +104,8 @@ margin-top:5px;
 <script>
 
 // some UI stuff
-this.document.getElementById("tabs-wrapper").style['top'] = (this.document.getElementById("computer-image").y + 20) + 'px' ;
-this.document.getElementById("tabs-wrapper").style['left'] =(this.document.getElementById("computer-image").x + 40) + 'px' ;
+//this.document.getElementById("tabs-wrapper").style['top'] = (this.document.getElementById("computer-image").y + 20) + 'px' ;
+//this.document.getElementById("tabs-wrapper").style['left'] =(this.document.getElementById("computer-image").x + 40) + 'px' ;
 
 
 	var starting_code = `// this Javascript code runs all the time a train enters a a station
@@ -380,11 +380,8 @@ if (station.isFactory()) {
     f2.open();
 	*/
 
-    /* DEBUG
-    _debugAddRail(this, RailSegment, 320, 320, ['N']);
-    _debugAddRail(this, RailSegment, 320, 288, ['N', 'S']);
-    _debugAddRail(this, RailSegment, 320, 256, ['S', 'E']);
-    _debugAddRail(this, RailSegment, 352, 256, ['W']);
+
+	/*
 
     let debugLocomotive = new Locomotive(this, this.grid, 320, 320, 'N');
     this.locomotiveGroup.add(debugLocomotive, true);
@@ -460,11 +457,6 @@ if (station.isFactory()) {
 
 
 
-  function _debugAddRail(game, class_, x, y, directions) {
-    let railSegment = new class_(game, x, y, directions);
-    game.grid.set({x: x, y: y}, railSegment);
-    game.buildingGroup.add(railSegment, true);
-  }
 
 
   /**
