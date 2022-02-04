@@ -84,7 +84,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 			if (this.fuel > 0){
 				this.locomotiveText.setText( Math.floor(this.fuel) + "/"+ this.fuel_capacity);
 			} else {
-				this.locomotiveText.setText("OUT OF FUEL!");
+				this.locomotiveText.setText("OUT OF FUEL: YOU LOST THE GAME!");
 			}
 			if (this.fuel < 10){
 				this.locomotiveText.setStyle({ fontSize: '30px', backgroundColor: 'red' })
