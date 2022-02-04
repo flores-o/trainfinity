@@ -127,6 +127,10 @@ class ActionController {
     return positions;
   }
 
+  onObjectCreatedCallback(object){
+    return true;
+  }
+
 }
 
 export {ActionController};
