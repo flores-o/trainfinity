@@ -20,18 +20,21 @@ class TrainBuilder {
 	this.gameObjects = []
 	this.trainCreated = false;
 	this.trainBuilderText = new Phaser.GameObjects.Text(
-		this.scene, 
+		this.scene,
 		0,0,
 		"lvl "+this.level);
 	this.trainBuilderText.depth = 1004
 	this.trainBuilderText.visible = false
-	this.scene.add.existing(this.trainBuilderText)
+	this.scene.add.existing(this.trainBuilderText);
+	this.hasCreatedTrain = false;
 
   }
 
+
+
   newTrain(level){
 	  this.scene._locomotiveBuilder.visible = true
-	  this.trainBuilderText.setPosition(this.scene._locomotiveBuilder.x + 20,  
+	  this.trainBuilderText.setPosition(this.scene._locomotiveBuilder.x + 20,
 	  this.scene._locomotiveBuilder.y)
 	  this.trainBuilderText.visible = true
 	  this.trainBuilderText.setText("lvl "+level)

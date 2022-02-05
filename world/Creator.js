@@ -39,8 +39,8 @@ class Creator {
 			this._debugAddRail(s.x - ( 1 *  constants.TILESIZE), s.y, ['W', 'E']);
 			this._debugAddRail(s.x - ( 0 *  constants.TILESIZE), s.y, ['W', 'E']);
 			this._debugAddRail(s.x - ( (-1) *  constants.TILESIZE), s.y, ['W', 'E']);
-			this._debugAddRail(s.x - ( (-2) *  constants.TILESIZE), s.y, ['W']);
-			  return;
+			this._game.debugRailway = this._debugAddRail(s.x - ( (-2) *  constants.TILESIZE), s.y, ['W']);
+			return;
 		  }
 	  }
 
@@ -52,6 +52,7 @@ class Creator {
     this._game.buildingGroup.add(railSegment, true);
 	var trees = this._game.grid.adjacentTrees({x: x, y: y});
 	trees.forEach(tree => { tree.kill(); })
+  return railSegment;
   }
 
   _createPlayer(){

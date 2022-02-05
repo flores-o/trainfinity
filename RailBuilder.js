@@ -19,12 +19,13 @@ class RailBuilder extends ActionController{
   onObjectCreatedCallback(rail){
     // get called all the time  rail is created succesfully
     // YOUR CODE HERE
-    ;debugger
-    if ((this.hasCreatedRailway==false) && (this.hasSelectedRailway))
+    if ((this.hasCreatedRailway==false) && (this.hasSelectedRailwayBefore==true))
      {
-        this.game.player.tutorial.modal_onboarding_instructions_build_railway.requestClose();
+        this.game.player.tutorial.completeStep();
+        this.game.player.tutorial.nextStep();
+        this.hasCreatedRailway = true;
       }
-      this.hasCreatedRailway = true;
+
 
     return true;
   }
