@@ -11,8 +11,8 @@ class Tutorial{
 		this.player = player;
 		this.step1 = false;
 		this.arrowStep = 0;
+		this.modal_onboarding_instructions_select_railway = null;
 		this.modal_onboarding_instructions_build_railway = null;
-		this.railway_select_instructions_were_shown = false;
 		this.onboarding_images = ['instructions_railway', 'instructions_bomb', 'instructions_train', 'instructions_first_goal']
 		this.arrow = null;
 		this.arrow_coordinates = [
@@ -21,8 +21,12 @@ class Tutorial{
 			[Math.floor(constants.WIDTH / 2) - (-1.5 * constants.TILESIZE), constants.HEIGHT - (1.5 * constants.TILESIZE)],
 			[null, null]
 		]
+
+
 		//this._showOnboarding();
-		this._showOnboardingInstructionsCreateRailway()
+		this._showOnboardingInstructionsSelectRailway()
+		//this._showOnboardingInstructionsCreateRailway()
+
 	}
 
 	_showOnboardingInstructionsSelectRailway()
@@ -34,7 +38,57 @@ class Tutorial{
 		}
 		let arrow_x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
 		let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
-		this._showOnboardingHelper(this.game, this.onboarding_images, 0, true, arrow_x, arrow_y)
+		// this._showOnboardingHelper(this.game, this.onboarding_images, 0, true, arrow_x, arrow_y)
+
+		let game = this.game
+		let onboarding_images = this.onboarding_images
+		let onboarding_step = 0
+		let use_arrow = true
+		//let arrow_x = arrow_x
+		//let arrow_y = arrow_y
+
+		let onboarding_steps =  onboarding_images.length
+		if (onboarding_step >= onboarding_steps){
+			return;
+		}
+		var button = game.add.image(550, 150, onboarding_images[onboarding_step])
+
+		var model = game.plugins.get('rexmodalplugin').add(button, {
+			cover: false,
+			manualClose: true,
+			duration: {
+				in: 1000,
+				out: 200
+			},
+		})
+		button.depth = 1000;
+		// Manual close Modal
+
+		button
+			.setInteractive()
+			.on('pointerup', function () {
+				//model.requestClose()
+				//this._showOnboardingHelper(game, onboarding_images, onboarding_step+1, true, arrow_x + 2 * constants.TILESIZE, arrow_y)
+			})
+		this.modal_onboarding_instructions_select_railway = model;
+		// modal code ends
+		if (this.arrow_coordinates[onboarding_step][0]==null && this.arrow_coordinates[onboarding_step][1] == null){
+			return
+		}
+
+		let arrow_railway_onboarding = game.add.image(arrow_x, arrow_y, 'arrow_down');
+		this.arrow = arrow_railway_onboarding;
+		this.step1 = true;
+		arrow_railway_onboarding.depth = 1100;
+
+		button
+		.setInteractive()
+		.on('pointerup', function () {
+			arrow_railway_onboarding.destroy()
+			this.step1 = false;
+			})
+
+
 
 	}
 
@@ -45,14 +99,20 @@ class Tutorial{
 		{
 			return;
 		}
-		let arrow_x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
-		let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
-		this._showOnboardingHelper(this.game, this.onboarding_images, 1, true, arrow_x, arrow_y)
+		if (!this.game.railBuilder.hasSelectedRailwayBefore)
+		{
+			return;
+		}
 
-	}
+		// this._showOnboardingHelper(this.game, this.onboarding_images, 1, true, arrow_x, arrow_y)
 
-	_showOnboardingHelper(game, onboarding_images, onboarding_step=null, use_arrow=false, arrow_x=null, arrow_y=null)
-	{
+		let game = this.game
+		let onboarding_images = this.onboarding_images
+		let onboarding_step = 1
+		let use_arrow = true
+		//let arrow_x = arrow_x
+		//let arrow_y = arrow_y
+
 		let onboarding_steps =  onboarding_images.length
 		if (onboarding_step >= onboarding_steps){
 		return
@@ -82,6 +142,8 @@ class Tutorial{
 			return
 		}
 
+		let arrow_x = Math.floor(constants.WIDTH / 2)  - (3.5 * constants.TILESIZE);
+		let arrow_y = constants.HEIGHT - (3.5 * constants.TILESIZE);
 		let arrow_railway_onboarding = game.add.image(arrow_x, arrow_y, 'arrow_down');
 		this.arrow = arrow_railway_onboarding;
 		this.step1 = true;
@@ -94,8 +156,9 @@ class Tutorial{
 			this.step1 = false;
 			})
 
-		// ending onboarding arrow
+
 	}
+
     // TODO moves only on first step
 	update(){
 
@@ -205,9 +268,13 @@ class Player {
       image.on('pointerdown', () => {
         this._game.selectedActionController = action.controller;
 		// for tutorial purposes
-		if(action['image']=='rail' && this.game.railBuilder.hasSelectedRailwayBefore == false)
+		if(action['image']=='rail' && this._game.railBuilder.hasSelectedRailwayBefore == false)
 		{
-			this.game.railBuilder.hasSelectedRailwayBefore = true;
+			this._game.railBuilder.hasSelectedRailwayBefore = true;
+			// close the first tutorial image
+			this.tutorial.modal_onboarding_instructions_select_railway.requestClose();
+			this.tutorial.arrow.visible = false;
+			this.tutorial._showOnboardingInstructionsCreateRailway();
 		}
       });
       x += 2 * constants.TILESIZE;
