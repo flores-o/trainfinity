@@ -108,25 +108,7 @@ margin-top:5px;
 //this.document.getElementById("tabs-wrapper").style['left'] =(this.document.getElementById("computer-image").x + 40) + 'px' ;
 
 
-	var starting_code = `// this Javascript code runs all the time a train enters a a station
-
-if (station.isMine()) {
-   // buy all the coal the train can carry
-   let coal = station.getAvailableCoal();
-   this.getCoalFromStation(station, coal);
-
-   // after trading wait one second before leaving
-   this.waitAtStation(1000);
-}
-if (station.isFactory()) {
-   // sell half the coal the train is carrying
-   let coal = this.getAvailableFuel() / 2;
-   this.giveCoalToStation(station, coal);
-
-   // after trading wait half second before leaving
-   this.waitAtStation(500);
-   this.print("test")
-}
+	var starting_code = `
 
 //
 // DOCS

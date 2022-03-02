@@ -221,9 +221,11 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  return this.fuel_capacity;
   }
 
-  replcesWorkingCode(){
+  _replacesWorkingCode(station){
+	;debugger
 	if (station.isMine()) {
 		// buy all the coal the train can carry
+		;debugger
 		let coal = station.getAvailableCoal();
 		this.getCoalFromStation(station, coal);
 
@@ -231,6 +233,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		this.waitAtStation(1000);
 	 }
 	 if (station.isFactory()) {
+		 ;debugger
 		// sell half the coal the train is carrying
 		let coal = this.getAvailableFuel() / 2;
 		this.giveCoalToStation(station, coal);
@@ -244,8 +247,8 @@ class Locomotive extends Phaser.GameObjects.Sprite {
   stopAt(station){
 	  this.stoppedTime = 1000;
 	  // THIS IS THE GAME EDITABLE CODE
-
-	   replacesWorkingCode()
+      ;debugger
+	   this._replacesWorkingCode(station)
 	  // FINISH GAME EDITABLE CODE
 
   }
