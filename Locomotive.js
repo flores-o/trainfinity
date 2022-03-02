@@ -110,7 +110,7 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 		let railSegment = this.grid.get({x: Math.floor(vector.x) , y: Math.floor(vector.y) })
 		if(typeof railSegment != 'undefined' && railSegment.building){
 			//TODO: ugly bug here, based on the speed is going to stop
-			// or not stop at a station. I.E. slow is going to stop 5 times, 
+			// or not stop at a station. I.E. slow is going to stop 5 times,
 			// fast is not going to stop. Looks like with 0.05 speed
 			// on alex computer is going to stop always once at all stations
 		  //
@@ -221,25 +221,31 @@ class Locomotive extends Phaser.GameObjects.Sprite {
 	  return this.fuel_capacity;
   }
 
+  replcesWorkingCode(){
+	if (station.isMine()) {
+		// buy all the coal the train can carry
+		let coal = station.getAvailableCoal();
+		this.getCoalFromStation(station, coal);
+
+		// after trading wait one second before leaving
+		this.waitAtStation(1000);
+	 }
+	 if (station.isFactory()) {
+		// sell half the coal the train is carrying
+		let coal = this.getAvailableFuel() / 2;
+		this.giveCoalToStation(station, coal);
+
+		// after trading wait half second before leaving
+		this.waitAtStation(500);
+		this.print("test")
+	 }
+  }
+
   stopAt(station){
 	  this.stoppedTime = 1000;
 	  // THIS IS THE GAME EDITABLE CODE
 
-	  try{
-		  var newSavedCode = document.getElementById("saved-code").innerHTML;
-		  eval(
-			  newSavedCode
-		  );
-		document.getElementById("working-code").innerHTML = newSavedCode;
-	  } catch(err) {
-		  alert("WARNING! the new code you write is breaking. Running previously working code. Error is: \n\n" + err.message + "\n\n"+err.stack);
-		  // TODO: bug the game might throw error on player written code 
-		  // cause it  is context based (e.g bug only in mine code and the train passing by factory
-		  // not breaking and getting saved as working code)
-		  eval(
-			document.getElementById("working-code").innerHTML
-		  );
-	  }
+	   replacesWorkingCode()
 	  // FINISH GAME EDITABLE CODE
 
   }
